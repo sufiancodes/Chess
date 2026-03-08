@@ -16,6 +16,14 @@ class Board
     board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(' ').to_s }.join("\n") + col_alphabets
   end
 
+  def at(position)
+    # this will be use for calling pieces by giving the index and it will list their possible moves
+  end
+
+  def possible_moves
+    # this wll give all the possible moves that current piece can perform
+  end
+
   private
 
   def populate_board
