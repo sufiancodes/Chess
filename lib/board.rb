@@ -1,12 +1,22 @@
+# frozen_string_literal: true
+
+# All logic related to board
 class Board
   attr_accessor :board
 
-  EMPTY_SPOT = "\u2610".freeze
+  EMPTY_SPOT = "\u2610"
   def initialize
-    @board = Array.new(8) { Array.new(8) { '' } }
+    @board = Array.new(8) { Array.new(8) { EMPTY_SPOT } }
   end
 
-  def to_s; end
+  def to_s
+    col_alphabets = "\n a b c d e f g h"
+    row_numbers = [8, 7, 6, 5, 4, 3, 2, 1]
+    populate_board
+    board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(' ').to_s }.join("\n") + col_alphabets
+  end
+
+  private
 
   def populate_board
     @board [0] = ["\u2656", "\u2658", "\u2657", "\u2654", "\u2655", "\u2657", "\u2658", "\u2656"]
@@ -16,27 +26,4 @@ class Board
   end
 end
 board = Board.new
-pp board.board
-board.populate_board
-pp board.board
-
-
-
-
-# black_knight = "\u265E"
-# white_knight = "\u2658"
-# black_squares = "100m"
-# white_squares = "107m"
-# print "\e[#{black_squares}#{white_knight}\e[0m"
-# print "\e[#{white_squares}#{black_knight}\e[0m"
-# puts ""
-
-# board = Array.new(8) {Array.new(8)}
-# pp board
-# # pp board
-# board.each do |row|
-#   row.each_with_index do |piece, index|
-#     puts row
-#     return
-#   end
-# end
+puts board
