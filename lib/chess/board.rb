@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'pieces/pawn'
 # All logic related to board
 class Board
   attr_accessor :board
@@ -16,8 +17,8 @@ class Board
     board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(' ').to_s }.join("\n") + col_alphabets
   end
 
-  def at(position)
-    # this will be use for calling pieces by giving the index and it will list their possible moves
+  def at(row, col)
+    board[row][col]
   end
 
   def possible_moves
@@ -28,10 +29,12 @@ class Board
 
   def populate_board
     @board [0] = ["\u2656", "\u2658", "\u2657", "\u2654", "\u2655", "\u2657", "\u2658", "\u2656"]
-    @board [1] = ["\u2659", "\u2659", "\u2659", "\u2659", "\u2659", "\u2659", "\u2659", "\u2659"]
+    @board [1] = [Pawn.new('black'), "\u2659", "\u2659", "\u2659", "\u2659", "\u2659", "\u2659", "\u2659"]
     @board [6] = ["\u265F", "\u265F", "\u265F", "\u265F", "\u265F", "\u265F", "\u265F", "\u265F"]
     @board [7] = ["\u265C", "\u265E", "\u265D", "\u265A", "\u265B", "\u265D", "\u265E", "\u265C"]
   end
 end
 board = Board.new
 puts board
+puts board.at(1,0)
+
