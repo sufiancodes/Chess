@@ -8,12 +8,12 @@ class Board
   EMPTY_SPOT = "\u2610"
   def initialize
     @board = Array.new(8) { Array.new(8) { EMPTY_SPOT } }
+    populate_board
   end
 
   def to_s
     col_alphabets = "\n a b c d e f g h"
     row_numbers = [8, 7, 6, 5, 4, 3, 2, 1]
-    populate_board
     board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(' ').to_s }.join("\n") + col_alphabets
   end
 
@@ -21,8 +21,13 @@ class Board
     board[row][col]
   end
 
-  def possible_moves
-    # this wll give all the possible moves that current piece can perform
+  def possible_moves_from(row, col)
+    piece = at(row, col)
+    piece.move(board, row, col)
+  end
+
+  def move_piece(from_row, form_col, to_row, to_col)
+    # this method will mutate board
   end
 
   private
@@ -36,5 +41,8 @@ class Board
 end
 board = Board.new
 puts board
-puts board.at(1,0)
+# pawn = board.at(1, 0)
+# p pawn
+board.possible_moves_from(1, 0)
+puts board
 

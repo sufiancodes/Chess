@@ -7,6 +7,14 @@ class Pawn
   def to_s
     @color == 'white' ? "\u265f" : "\u2659"
   end
+
+  def list_legal_moves(board, row, col)
+    # piece = board[row][col]
+    # board[row][col] = "\u2610"
+    # board[row + 1][col] = piece
+    # now just need to implement its rules
+    if row
+  end
 end
 pawn = Pawn.new('black', 'a1')
 puts pawn
