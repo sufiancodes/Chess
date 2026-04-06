@@ -2,54 +2,53 @@
 
 # this module calculate moves for all the pieces
 module MoveCalculator
-  def self.legal_moves(row, col, board)
-    piece = board.piece_at(row, col)
-    color = piece.color
+  class << self
+    def legal_moves(row, col, board)
+      piece = board.piece_at(row, col)
+      color = piece.color
 
-    case piece
-    when Pawn
-      calculate_pawn_moves(row, col, color, piece, board)
-      # when Rook
-      #   calculate_rook_moves(position, board, color)
+      case piece
+      when Pawn
+        calculate_pawn_moves(row, col, color, piece, board)
+        # when Rook
+        #   calculate_rook_moves(position, board, color)
+      end
     end
-  end
 
-  def self.calculate_pawn_moves(row, col, color, piece, board)
-    if color == 'white'
-      calculate_white_pawn_moves(row, col, piece, board)
-    elsif color == 'black'
-      calculate_black_pawn_moves(row, col, piece, board)
+    def calculate_pawn_moves(row, col, color, piece, board)
+      if color == 'white'
+        calculate_white_pawn_moves(row, col, piece, board)
+      elsif color == 'black'
+        calculate_black_pawn_moves(row, col, piece, board)
+      end
     end
-  end
 
-  private
+    private
 
-  def self.calculate_black_pawn_moves(row, col, piece, board)
-    moves = []
-    next_square = board.piece_at(row + 1, col)
-    second_next_square = board.piece_at(row + 2, col)
-    left_diagonal = board.piece_at(row + 1, col - 1)
-    right_diagonal = board.piece_at(row + 1, col + 1)
-    empty = "\u2610"
+    def calculate_black_pawn_moves(row, col, piece, board)
+      moves = []
+      next_square = board.piece_at(row + 1, col)
+      second_next_square = board.piece_at(row + 2, col)
+      left_diagonal_piece = col.zero? ? board.piece_at(row, col) : board.piece_at(row + 1, col - 1)
+      right_diagonal_piece = col == 7 ? board.piece_at(row, col) : board.piece_at(row + 1, col + 1)
+      empty = "\u2610"
 
-    # starter move when board is clear and pawn hasn't move yet
-    moves << [row + 2, col] if piece.has_move == false && next_square == empty && second_next_square == empty
+      # starter move when board is clear and pawn hasn't move yet
+      moves << [row + 2, col] if piece.has_moved == false && next_square == empty && second_next_square == empty
 
-    # starter move when pawn hasn't move and board is little clear not too clear
-    moves << [row + 1, col] if piece.has_move == false && next_square == empty && second_next_square != empty
+      # starter move when pawn hasn't move and board is little clear not too clear
+      moves << [row + 1, col] if piece.has_moved == false && next_square == empty && second_next_square != empty
 
-    # regular one square movement
-    moves << [row + 1, col] if next_square == empty && piece.has_move == true
+      # regular one square movement
+      moves << [row + 1, col] if next_square == empty && piece.has_moved == true
 
-    # capture left diagonal
-    moves << [row + 1, col - 1] if left_diagonal == empty && piece.color != 'black'
+      # capture left diagonal
+      moves << [row + 1, col - 1] if left_diagonal_piece.color != 'black'
 
-    # capture right diagonal
-    moves << [row + 1, col + 1] if right_diagonal == empty && piece.color != 'black'
+      # capture right diagonal
+      moves << [row + 1, col + 1] if right_diagonal_piece.color != 'black'
 
-    p moves
+      moves
+    end
   end
 end
-# do the singleton class
-
-# why aren't you capturing bro
