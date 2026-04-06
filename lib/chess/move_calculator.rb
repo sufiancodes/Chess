@@ -27,7 +27,7 @@ module MoveCalculator
 
     def calculate_black_pawn_moves(row, col, piece, board)
       moves = []
-      next_square = board.piece_at(row + 1, col)
+      next_square = row == 7 ? board.piece_at(row, col) : board.piece_at(row + 1, col)
       second_next_square = board.piece_at(row + 2, col)
       left_diagonal_piece = col.zero? ? board.piece_at(row, col) : board.piece_at(row + 1, col - 1)
       right_diagonal_piece = col == 7 ? board.piece_at(row, col) : board.piece_at(row + 1, col + 1)
