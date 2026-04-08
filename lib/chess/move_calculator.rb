@@ -50,5 +50,31 @@ module MoveCalculator
 
       moves
     end
+
+    def calculate_white_pawn_moves(row, col, piece, board)
+      moves = []
+      next_square = board.piece_at(row - 1, col)
+      second_next_square = board.piece_at(row - 2, col)
+      left_diagonal_piece = board.piece_at(row - 1, col - 1)
+      right_diagonal_piece = board.piece_at(row - 1, col + 1)
+      empty = "\u2610"
+
+      # starter move when board is clear and pawn hasn't move yet
+      moves << [row - 2, col] if piece.has_moved == false && next_square == empty && second_next_square == empty
+
+      # starter move when board is little clear not too clear but just a little clear
+      moves << [row - 1, col] if piece.has_moved == false && next_square == empty && second_next_square != empty
+
+      # regular one square movement
+      moves << [row - 1, col] if next_square == empty
+
+      # capture left diagonal
+      moves << [row - 1, col - 1] if left_diagonal_piece == empty && piece.color != 'white'
+
+      # capture right diagonal
+      moves << [row - 1, col + 1] if right_diagonal_piece == empty && piece.color != 'white'
+
+      moves
+    end
   end
 end
