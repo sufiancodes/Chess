@@ -53,10 +53,10 @@ module MoveCalculator
 
     def calculate_white_pawn_moves(row, col, piece, board)
       moves = []
-      next_square = board.piece_at(row - 1, col)
+      next_square = row.zero? ? board.piece_at(row, col) : board.piece_at(row - 1, col)
       second_next_square = board.piece_at(row - 2, col)
-      left_diagonal_piece = board.piece_at(row - 1, col - 1)
-      right_diagonal_piece = board.piece_at(row - 1, col + 1)
+      left_diagonal_piece = col.zero? ? board.piece_at(row, col) : board.piece_at(row - 1, col - 1)
+      right_diagonal_piece = col.zero? ? board.piece_at(row, col) : board.piece_at(row - 1, col + 1)
       empty = "\u2610"
 
       # starter move when board is clear and pawn hasn't move yet
