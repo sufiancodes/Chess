@@ -22,27 +22,27 @@ class Board
     @board [row][col]
   end
 
-  def possible_moves_from(row, col)
-    MoveCalculator.legal_moves(row, col, self)
+  def possible_moves_from(array)
+    MoveCalculator.legal_moves(array[0], array[1], self)
   end
 
-  def move_piece(from_row, form_col, to_row, to_col)
-    piece = @board [from_row] [form_col]
-    @board [to_row] [to_col] = piece
-    @board [from_row] [form_col] = EMPTY_SPOT
+  def move_piece(from, to)
+    # I can also use just 2 arguments as arrays one os to array other is from
+    piece = @board [from[0]] [from[1]]
+    @board [to[0]] [to[1]] = piece
+    @board [from[0]] [from[1]] = EMPTY_SPOT
   end
 
   private
 
   def populate_board
     @board [0] = ["\u2656", "\u2658", "\u2657", "\u2654", "\u2655", "\u2657", "\u2658", "\u2656"]
-    @board [1] = [Pawn.new('black', 1, 0, false), Pawn.new('black', 1, 1, false), Pawn.new('black', 1, 2, false), Pawn.new('black', 1, 3, false), Pawn.new('black', 1, 4, false), Pawn.new('black', 1, 5, false), Pawn.new('black', 1, 6, false), Pawn.new('black', 1, 7, false)]
-    @board [6] = [Pawn.new('white', 6, 0, false), Pawn.new('white', 6, 1, false), Pawn.new('white', 6, 2, false), Pawn.new('white', 6, 3, false), Pawn.new('white', 6, 4, false), Pawn.new('white', 6, 5, false), Pawn.new('white', 6, 6, false), Pawn.new('white', 6, 7, false)]
+    @board [1] =
+      [Pawn.new('black', 1, 0, false), Pawn.new('black', 1, 1, false), Pawn.new('black', 1, 2, false),
+       Pawn.new('black', 1, 3, false), Pawn.new('black', 1, 4, false), Pawn.new('black', 1, 5, false), Pawn.new('black', 1, 6, false), Pawn.new('black', 1, 7, false)]
+    @board [6] =
+      [Pawn.new('white', 6, 0, false), Pawn.new('white', 6, 1, false), Pawn.new('white', 6, 2, false),
+       Pawn.new('white', 6, 3, false), Pawn.new('white', 6, 4, false), Pawn.new('white', 6, 5, false), Pawn.new('white', 6, 6, false), Pawn.new('white', 6, 7, false)]
     @board [7] = ["\u265C", "\u265E", "\u265D", "\u265A", "\u265B", "\u265D", "\u265E", "\u265C"]
   end
 end
-board = Board.new
-puts board
-# p board.possible_moves_from(6, 0)
-# board.move_piece(1, 0, 3, 0)
-puts board

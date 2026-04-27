@@ -8,9 +8,12 @@ class Game
   end
 
   def translate_user_input(position)
-    col = { 'a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5, 'g' => 6, 'h' => 7 }
-    row = { '0' => 8, '1' => 7, '2' => 6, '3' => 5, '4' => 4, '5' => 3, '6' => 2, '7' => 1 }
-    create_useable_array(position, col, row)
+    array = position.split('')
+    col_map = %w[a b c d e f g h]
+    row_map = [0, 1, 2, 3, 4, 5, 6, 7]
+    col = col_map.find_index(array.first)
+    row = row_map.find_index(array.last.to_i)
+    result = [row, col]
   end
 
   def translate_computer_input(array)
@@ -31,21 +34,6 @@ class Game
       p translate_computer_input([4, 0])
     end
   end
-
-  private
-
-  def create_useable_array(position, col_alphabets, row_numbers)
-    pos = position.split('')
-    column = pos.first
-    row = pos.last
-    prefix = row_numbers[row]
-    suffix = col_alphabets[column]
-    result = []
-    result << prefix
-    result << suffix
-    result
-  end
 end
 game = Game.new
-# game.play
-p translate_computer_input([4, 0])
+game.play
