@@ -53,26 +53,37 @@ module MoveCalculator
 
     def calculate_white_pawn_moves(row, col, piece, board)
       moves = []
-      next_square = row.zero? ? board.piece_at(row, col) : board.piece_at(row - 1, col)
-      second_next_square = board.piece_at(row - 2, col)
-      left_diagonal_piece = col.zero? ? board.piece_at(row, col) : board.piece_at(row - 1, col - 1)
-      right_diagonal_piece = col.zero? ? board.piece_at(row, col) : board.piece_at(row - 1, col + 1)
       empty = "\u2610"
 
-      # starter move when board is clear and pawn hasn't move yet
-      moves << [row - 2, col] if piece.has_moved == false && next_square == empty && second_next_square == empty
+      one_forward_row = row - 1
+      two_forward_row = row - 2
 
-      # starter move when board is little clear not too clear but just a little clear
-      moves << [row - 1, col] if piece.has_moved == false && next_square == empty && second_next_square != empty
+      # Stop if moving forward is off-board
+      return moves if one_forward_row < 0
 
-      # regular one square movement
-      moves << [row - 1, col] if next_square == empty
+      one_forward = board.piece_at(one_forward_row, col)
 
-      # capture left diagonal
-      moves << [row - 1, col - 1] if left_diagonal_piece == empty && piece.color != 'white'
+      # one square forward
+      if one_forward == empty
+        moves << [one_forward_row, col]
 
-      # capture right diagonal
-      moves << [row - 1, col + 1] if right_diagonal_piece == empty && piece.color != 'white'
+        # two squares forward (only if one forward is empty AND pawn hasn't moved)
+        if !piece.has_moved && two_forward_row >= 0
+          two_forward = board.piece_at(two_forward_row, col)
+          moves << [two_forward_row, col] if two_forward == empty
+        end
+      end
+
+      # captures (only if diagonals are on-board)
+      if col - 1 >= 0
+        diag_left = board.piece_at(one_forward_row, col - 1)
+        moves << [one_forward_row, col - 1] if diag_left != empty && diag_left.color == 'black'
+      end
+
+      if col + 1 <= 7 # adjust if your board size differs
+        diag_right = board.piece_at(one_forward_row, col + 1)
+        moves << [one_forward_row, col + 1] if diag_right != empty && diag_right.color == 'black'
+      end
 
       moves
     end
