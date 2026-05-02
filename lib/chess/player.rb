@@ -23,5 +23,11 @@ class Player
     end
   end
 
-  
+  def switch_player!
+    if @turn.zero?
+      @turn = 1
+    else
+      @turn = 0
+    end
+  end
 end
