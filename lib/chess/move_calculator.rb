@@ -10,21 +10,32 @@ module MoveCalculator
       case piece
       when Pawn
         calculate_pawn_moves(row, col, color, piece, board)
-        # when Rook
-        #   calculate_rook_moves(position, board, color)
+      when Knight
+        calculate_knight_moves(row, col, color, piece, board)
       end
     end
 
     def calculate_pawn_moves(row, col, color, piece, board)
-      if color == 'white'
-        calculate_white_pawn_moves(row, col, piece, board)
-      elsif color == 'black'
+      if color == 'black'
         calculate_black_pawn_moves(row, col, piece, board)
+      else
+        calculate_white_pawn_moves(row, col, piece, board)
+      end
+    end
+
+    def calculate_knight_moves(row, col, color, piece, board)
+      if color == 'black'
+        calculate_black_knight_moves(row, col, piece, board)
+      else
+        calculate_white_knight_moves(row, col, piece, board)
       end
     end
 
     private
 
+    # For Black and White Knight move calculation
+
+    # For Black and White Pawn move calculation
     def calculate_black_pawn_moves(row, col, piece, board)
       moves = []
       empty = "\u2610"
