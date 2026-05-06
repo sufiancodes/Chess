@@ -14,8 +14,8 @@ class Game
 
   def translate_user_input(position)
     col = { 'a' => 0, 'b' => 1, 'c' => 2, 'd' => 3, 'e' => 4, 'f' => 5, 'g' => 6, 'h' => 7 }
-    row = { '0' => 8, '1' => 7, '2' => 6, '3' => 5, '4' => 4, '5' => 3, '6' => 2, '7' => 1 }
-    create_useable_array(position, col, row)
+    row = { '1' => 7, '2' => 6, '3' => 5, '4' => 4, '5' => 3, '6' => 2, '7' => 1, '8' => 0 }
+    p create_useable_array(position, col, row)
   end
 
   def translate_computer_input(array)
@@ -29,9 +29,11 @@ class Game
     @player.welcome
     loop do
       puts @board
-      puts "Please chose the piece you wish to move #{player.current_player}"
+      puts "#{player.current_player}: Please chose the piece you wish to move"
       input = gets.chomp
+      p input
       array = translate_user_input(input)
+      p array
       moves = @board.possible_moves_from(array)
       if moves.empty?
         puts 'no possible move available'
@@ -43,7 +45,6 @@ class Game
       iii = translate_user_input(ip)
       @board.move_piece(array, iii)
       puts @board
-      # now its time do switch sides
       player.switch_player!
     end
   end
@@ -52,11 +53,9 @@ class Game
 
   def create_useable_array(position, col_alphabets, row_numbers)
     pos = position.split('')
-    column = pos.first
-    row = pos.last
-    prefix = row_numbers[row]
-    suffix = col_alphabets[column]
-    result = [prefix, suffix]
+    column = pos[0]
+    row = pos[1]
+    result = [row_numbers[row], col_alphabets[column]]
   end
 end
 
