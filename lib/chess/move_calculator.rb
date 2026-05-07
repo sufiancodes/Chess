@@ -36,23 +36,27 @@ module MoveCalculator
     # For Black and White Knight move calculation
     def calculate_black_knight_moves(row, col, piece, board)
       adjacent = []
+      moves = []
       empty = "\u2610"
       # knight can only move at the squares where its either empty or whites piece
 
-      adjacent << [[row + 2, col - 1]]
-      adjacent << [[row + 2, col + 1]]
+      adjacent << [row + 2, col - 1]
+      adjacent << [row + 2, col + 1]
 
-      adjacent << [[row + 1, col - 2]]
-      adjacent << [[row - 1, col - 2]]
+      adjacent << [row + 1, col - 2]
+      adjacent << [row - 1, col - 2]
 
-      adjacent << [[row + 1, col + 2]]
-      adjacent << [[row - 1, col + 2]]
+      adjacent << [row + 1, col + 2]
+      adjacent << [row - 1, col + 2]
 
-      adjacent << [[row - 2, col - 1]]
-      adjacent << [[row - 2, col + 1]]
+      adjacent << [row - 2, col - 1]
+      adjacent << [row - 2, col + 1]
 
       filter_illegal_position(adjacent)
+      # only add those moves in result at which position board at either return empty or white piece
     end
+
+    def calculate_white_knight_moves(row, col, piece, board); end
 
     def filter_illegal_position(array)
       array.reject do |inner_array|
