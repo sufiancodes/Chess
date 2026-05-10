@@ -24,17 +24,13 @@ module MoveCalculator
     end
 
     def calculate_knight_moves(row, col, color, piece, board)
-      if color == 'black'
-        calculate_black_knight_moves(row, col, piece, board)
-      else
-        calculate_white_knight_moves(row, col, piece, board)
-      end
+      knight_moves(row, col, piece, board)
     end
 
     private
 
     # For Black and White Knight move calculation
-    def calculate_black_knight_moves(row, col, piece, board)
+    def knight_moves(row, col, piece, board)
       adjacent = []
       empty = "\u2610"
       target = piece.enemy_color
@@ -67,8 +63,6 @@ module MoveCalculator
       end
       moves
     end
-
-    def calculate_white_knight_moves(row, col, piece, board); end
 
     def filter_illegal_position(array)
       array.reject do |inner_array|
