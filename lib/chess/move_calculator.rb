@@ -52,9 +52,17 @@ module MoveCalculator
       adjacent << [row - 2, col - 1]
       adjacent << [row - 2, col + 1]
 
-      filter_illegal_position(adjacent)
-      # only add those moves in result at which position board at either return empty or white piece
+      result = filter_illegal_position(adjacent)
+      result.each do |(row, col)|
+      piece = board.piece_at(row, col)
+      if piece == empty
+        moves << [row, col]
+      elsif piece.color == 'white'
+        moves << [row, col]
+      end
     end
+    moves
+  end
 
     def calculate_white_knight_moves(row, col, piece, board); end
 
