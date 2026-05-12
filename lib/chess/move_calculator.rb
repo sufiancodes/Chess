@@ -12,6 +12,8 @@ module MoveCalculator
         calculate_pawn_moves(row, col, color, piece, board)
       when Knight
         calculate_knight_moves(row, col, color, piece, board)
+      when Rook
+        calculate_rook_moves(row, col, color, piece, board)
       end
     end
 
@@ -69,7 +71,6 @@ module MoveCalculator
         inner_array.any? { |element| element.negative? || element > 7 }
       end
     end
-
     # For Black and White Pawn move calculation
     def calculate_black_pawn_moves(row, col, piece, board)
       moves = []
