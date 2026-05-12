@@ -25,6 +25,14 @@ module MoveCalculator
       end
     end
 
+    def calculate_rook_moves(row, col, color, piece, board)
+      if color = 'black'
+        calculate_black_rook_moves(row, col, piece, board)
+      else
+        calculate_white_rook_moves(row, col, piece, board)
+      end
+    end
+
     def calculate_knight_moves(row, col, color, piece, board)
       knight_moves(row, col, piece, board)
     end
