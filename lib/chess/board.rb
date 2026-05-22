@@ -28,6 +28,11 @@ class Board
     @board [row]
   end
 
+  def column(col)
+    rotated_board = @board.transpose
+    rotated_board [col]
+  end
+
   def possible_moves_from(array)
     MoveCalculator.legal_moves(array[0], array[1], self)
   end
@@ -57,4 +62,5 @@ class Board
 end
 board = Board.new
 puts board
-p board.row(0)
+# p board.row(0)
+p board.column(0)
