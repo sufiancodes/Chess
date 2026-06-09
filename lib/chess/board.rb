@@ -28,6 +28,15 @@ class Board
     @board [row]
   end
 
+  def empty_at?(row, col)
+    piece_at(row, col) == EMPTY_SPOT
+  end
+
+  def enemy_at?(own_color, row, col)
+    enemy_color = piece_at(row, col).color
+    own_color.eql?(enemy_color) ? false : true
+  end
+
   def column(col)
     rotated_board = @board.transpose
     rotated_board [col]
@@ -60,7 +69,8 @@ class Board
       [Rook.new('white', 7, 0, false), Knight.new('white', 7, 1), "\u265D", "\u265A", "\u265B", "\u265D", Knight.new('white', 7, 6), Rook.new('white', 7, 7, false)]
   end
 end
+
 board = Board.new
 puts board
-# p board.row(0)
-p board.column(0)
+# puts board.empty_at?(1,0)
+puts board.enemy_at('black', 0, 0)
