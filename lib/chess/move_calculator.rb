@@ -26,7 +26,7 @@ module MoveCalculator
     end
 
     def calculate_rook_moves(row, col, color, piece, board)
-      if color = 'black'
+      if color == 'black'
         calculate_black_rook_moves(row, col, piece, board)
       else
         calculate_white_rook_moves(row, col, piece, board)
@@ -38,6 +38,24 @@ module MoveCalculator
     end
 
     private
+    # For Black rook move calculation
+    def calculate_black_rook_moves(row, col, piece, board)
+      moves = []
+      # downward
+      (row + 1..7).each do |current_row|
+        break if !board.empty_at?(current_row, col) && !board.enemy_at?(piece.color, current_row, col)
+        moves << [current_row, col]
+        break if board.enemy_at?(piece.color, current_row, col)
+      end
+      
+      # upward
+      (0..row - 1).reverse_each do |current_row|
+        break if !board.empty_at?(current_row, col) && !board.enemy_at?(piece.color, current_row, col)
+        moves << [current_row, col]
+        break if board.enemy_at?(piece.color, current_row, col)
+      end
+      moves
+    end
 
     # For Black and White Knight move calculation
     def knight_moves(row, col, piece, board)
@@ -79,7 +97,7 @@ module MoveCalculator
         inner_array.any? { |element| element.negative? || element > 7 }
       end
     end
-    # For Black and White Pawn move calculation
+    # For Black Pawn move calculation
     def calculate_black_pawn_moves(row, col, piece, board)
       moves = []
       empty = "\u2610"
@@ -116,6 +134,7 @@ module MoveCalculator
       moves
     end
 
+    # For White Pawn move calculation
     def calculate_white_pawn_moves(row, col, piece, board)
       moves = []
       empty = "\u2610"
