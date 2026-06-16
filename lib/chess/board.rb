@@ -33,7 +33,10 @@ class Board
   end
 
   def enemy_at?(own_color, row, col)
-    enemy_color = piece_at(row, col).color
+    piece = piece_at(row, col)
+    return false if piece.is_a?(String)
+
+    enemy_color = piece.color
     own_color.eql?(enemy_color) ? false : true
   end
 
@@ -66,11 +69,12 @@ class Board
       [Pawn.new('white', 6, 0, false), Pawn.new('white', 6, 1, false), Pawn.new('white', 6, 2, false),
        Pawn.new('white', 6, 3, false), Pawn.new('white', 6, 4, false), Pawn.new('white', 6, 5, false), Pawn.new('white', 6, 6, false), Pawn.new('white', 6, 7, false)]
     @board [7] =
-      [Rook.new('white', 7, 0, false), Knight.new('white', 7, 1), "\u265D", "\u265A", "\u265B", "\u265D", Knight.new('white', 7, 6), Rook.new('white', 7, 7, false)]
+      [Rook.new('white', 7, 0, false), Knight.new('white', 7, 1), "\u265D", "\u265A", "\u265B", "\u265D",
+       Knight.new('white', 7, 6), Rook.new('white', 7, 7, false)]
   end
 end
 
 board = Board.new
 puts board
-# puts board.empty_at?(1,0)
-puts board.enemy_at('black', 0, 0)
+# # puts board.empty_at?(1,0)
+puts board.enemy_at?('black', 7, 0)
