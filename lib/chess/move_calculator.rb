@@ -42,15 +42,17 @@ module MoveCalculator
     def calculate_black_rook_moves(row, col, piece, board)
       moves = []
       # downward
-      (row + 1..7).each do |current_row|
+      (row + 1).upto(7) do |current_row|
         break if !board.empty_at?(current_row, col) && !board.enemy_at?(piece.color, current_row, col)
+
         moves << [current_row, col]
         break if board.enemy_at?(piece.color, current_row, col)
       end
-      
+
       # upward
-      (0..row - 1).reverse_each do |current_row|
+      (row - 1).downto(0) do |current_row|
         break if !board.empty_at?(current_row, col) && !board.enemy_at?(piece.color, current_row, col)
+
         moves << [current_row, col]
         break if board.enemy_at?(piece.color, current_row, col)
       end
@@ -97,6 +99,7 @@ module MoveCalculator
         inner_array.any? { |element| element.negative? || element > 7 }
       end
     end
+
     # For Black Pawn move calculation
     def calculate_black_pawn_moves(row, col, piece, board)
       moves = []
