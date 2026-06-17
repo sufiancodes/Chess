@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'move_calculator'
-require_relative 'pieces/pawn'
-require_relative 'pieces/knight'
-require_relative 'pieces/rook'
+require_relative "move_calculator"
+require_relative "pieces/pawn"
+require_relative "pieces/knight"
+require_relative "pieces/rook"
 # All logic related to board
 class Board
   include MoveCalculator
@@ -17,15 +17,15 @@ class Board
   def to_s
     col_alphabets = "\n a b c d e f g h"
     row_numbers = [8, 7, 6, 5, 4, 3, 2, 1]
-    @board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(' ').to_s }.join("\n") + col_alphabets
+    @board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(" ").to_s }.join("\n") + col_alphabets
   end
 
   def piece_at(row, col)
-    @board [row][col]
+    @board[row][col]
   end
 
   def row(row)
-    @board [row]
+    @board[row]
   end
 
   def empty_at?(row, col)
@@ -40,9 +40,15 @@ class Board
     own_color.eql?(enemy_color) ? false : true
   end
 
+  def friendly_at?(own_color, row, col)
+    piece = piece_at(row, col)
+    return false if piece.is_a?(String)
+
+    true if piece.color == own_color
+  end
   def column(col)
     rotated_board = @board.transpose
-    rotated_board [col]
+    rotated_board[col]
   end
 
   def possible_moves_from(array)
@@ -50,31 +56,63 @@ class Board
   end
 
   def move_piece(from, to)
-    piece = @board [from[0]] [from[1]]
+    piece = @board[from[0]][from[1]]
     piece.has_moved = true if piece.instance_of?(Pawn)
-    @board [to[0]] [to[1]] = piece
-    @board [from[0]] [from[1]] = EMPTY_SPOT
+    @board[to[0]][to[1]] = piece
+    @board[from[0]][from[1]] = EMPTY_SPOT
   end
 
   private
 
   def populate_board
-    @board [0] =
-      [Rook.new('black', 0, 0, false), Knight.new('black', 0, 1), "\u2657", "\u2654", "\u2655", "\u2657",
-       Knight.new('black', 0, 6), Rook.new('black', 0, 7, false)]
-    @board [1] =
-      [EMPTY_SPOT, Pawn.new('black', 1, 1, false), Pawn.new('black', 1, 2, false),
-       Pawn.new('black', 1, 3, false), Pawn.new('black', 1, 4, false), Pawn.new('black', 1, 5, false), Pawn.new('black', 1, 6, false), Pawn.new('black', 1, 7, false)]
-    @board [6] =
-      [Pawn.new('white', 6, 0, false), Pawn.new('white', 6, 1, false), Pawn.new('white', 6, 2, false),
-       Pawn.new('white', 6, 3, false), Pawn.new('white', 6, 4, false), Pawn.new('white', 6, 5, false), Pawn.new('white', 6, 6, false), Pawn.new('white', 6, 7, false)]
-    @board [7] =
-      [Rook.new('white', 7, 0, false), Knight.new('white', 7, 1), "\u265D", "\u265A", "\u265B", "\u265D",
-       Knight.new('white', 7, 6), Rook.new('white', 7, 7, false)]
+    @board[0] =
+      [
+        Rook.new("black", 0, 0, false),
+        Knight.new("black", 0, 1),
+        "\u2657",
+        "\u2654",
+        "\u2655",
+        "\u2657",
+        Knight.new("black", 0, 6),
+        Rook.new("black", 0, 7, false),
+      ]
+    @board[1] =
+      [
+        EMPTY_SPOT,
+        Pawn.new("black", 1, 1, false),
+        Pawn.new("black", 1, 2, false),
+        Pawn.new("black", 1, 3, false),
+        Pawn.new("black", 1, 4, false),
+        Pawn.new("black", 1, 5, false),
+        Pawn.new("black", 1, 6, false),
+        Pawn.new("black", 1, 7, false),
+      ]
+    @board[6] =
+      [
+        Pawn.new("white", 6, 0, false),
+        Pawn.new("white", 6, 1, false),
+        Pawn.new("white", 6, 2, false),
+        Pawn.new("white", 6, 3, false),
+        Pawn.new("white", 6, 4, false),
+        Pawn.new("white", 6, 5, false),
+        Pawn.new("white", 6, 6, false),
+        Pawn.new("white", 6, 7, false),
+      ]
+    @board[7] =
+      [
+        Rook.new("white", 7, 0, false),
+        Knight.new("white", 7, 1),
+        "\u265D",
+        "\u265A",
+        "\u265B",
+        "\u265D",
+        Knight.new("white", 7, 6),
+        Rook.new("white", 7, 7, false),
+      ]
   end
 end
 
 board = Board.new
 puts board
 # # puts board.empty_at?(1,0)
-puts board.enemy_at?('black', 7, 0)
+puts board.enemy_at?("black", 7, 0)
