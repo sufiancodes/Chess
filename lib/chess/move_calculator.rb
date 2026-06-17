@@ -43,7 +43,7 @@ module MoveCalculator
       moves = []
       # downward
       (row + 1).upto(7) do |current_row|
-        break if !board.empty_at?(current_row, col) && !board.enemy_at?(piece.color, current_row, col)
+        break if board.friendly_at?(piece.color, current_row, col)
 
         moves << [current_row, col]
         break if board.enemy_at?(piece.color, current_row, col)
@@ -51,7 +51,7 @@ module MoveCalculator
 
       # upward
       (row - 1).downto(0) do |current_row|
-        break if !board.empty_at?(current_row, col) && !board.enemy_at?(piece.color, current_row, col)
+        break if board.friendly_at?(piece.color, current_row, col)
 
         moves << [current_row, col]
         break if board.enemy_at?(piece.color, current_row, col)
