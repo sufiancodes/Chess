@@ -18,7 +18,7 @@ module MoveCalculator
     end
 
     def calculate_pawn_moves(row, col, color, piece, board)
-      if color == 'black'
+      if color == "black"
         calculate_black_pawn_moves(row, col, piece, board)
       else
         calculate_white_pawn_moves(row, col, piece, board)
@@ -26,7 +26,7 @@ module MoveCalculator
     end
 
     def calculate_rook_moves(row, col, color, piece, board)
-      if color == 'black'
+      if color == "black"
         calculate_black_rook_moves(row, col, piece, board)
       else
         calculate_white_rook_moves(row, col, piece, board)
@@ -38,6 +38,7 @@ module MoveCalculator
     end
 
     private
+
     # For Black rook move calculation
     def calculate_black_rook_moves(row, col, piece, board)
       moves = []
@@ -55,6 +56,20 @@ module MoveCalculator
 
         moves << [current_row, col]
         break if board.enemy_at?(piece.color, current_row, col)
+      end
+      # rightward
+      (col + 1).upto(7) do |current_column|
+        break if board.friendly_at?(piece.color, row, current_column)
+
+        moves << [row, current_column]
+        break if board.enemy_at?(piece.color, row, current_column)
+      end
+      # leftward
+      (col - 1).downto(0) do |current_column|
+        break if board.friendly_at?(piece.color, row, current_column)
+
+        moves << [row, current_column]
+        break if board.enemy_at?(piece.color, row, current_column)
       end
       moves
     end
@@ -86,9 +101,9 @@ module MoveCalculator
       array.each do |(row, col)|
         piece = board.piece_at(row, col)
         if piece == empty
-        moves << [row, col]
+          moves << [row, col]
         elsif piece.color == target
-        moves << [row, col]
+          moves << [row, col]
         end
       end
       moves
@@ -126,12 +141,12 @@ module MoveCalculator
 
       if col - 1 >= 0
         diag_right = board.piece_at(one_forward_row, col - 1)
-        moves << [one_forward_row, col - 1] if diag_right != empty && diag_right.color == 'white'
+        moves << [one_forward_row, col - 1] if diag_right != empty && diag_right.color == "white"
       end
 
       if col + 1 <= 7 # adjust if your board size differs
         diag_left = board.piece_at(one_forward_row, col + 1)
-        moves << [one_forward_row, col + 1] if diag_left != empty && diag_left.color == 'white'
+        moves << [one_forward_row, col + 1] if diag_left != empty && diag_left.color == "white"
       end
 
       moves
@@ -164,12 +179,12 @@ module MoveCalculator
       # captures (only if diagonals are on-board)
       if col - 1 >= 0
         diag_right = board.piece_at(one_forward_row, col - 1)
-        moves << [one_forward_row, col - 1] if diag_right != empty && diag_right.color == 'black'
+        moves << [one_forward_row, col - 1] if diag_right != empty && diag_right.color == "black"
       end
 
       if col + 1 <= 7 # adjust if your board size differs
         diag_right = board.piece_at(one_forward_row, col + 1)
-        moves << [one_forward_row, col + 1] if diag_right != empty && diag_right.color == 'black'
+        moves << [one_forward_row, col + 1] if diag_right != empty && diag_right.color == "black"
       end
 
       moves
