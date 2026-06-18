@@ -25,14 +25,6 @@ module MoveCalculator
       end
     end
 
-    def calculate_rook_moves(row, col, color, piece, board)
-      if color == "black"
-        calculate_black_rook_moves(row, col, piece, board)
-      else
-        calculate_white_rook_moves(row, col, piece, board)
-      end
-    end
-
     def calculate_knight_moves(row, col, color, piece, board)
       knight_moves(row, col, piece, board)
     end
@@ -40,36 +32,36 @@ module MoveCalculator
     private
 
     # For Black rook move calculation
-    def calculate_black_rook_moves(row, col, piece, board)
+    def calculate_rook_moves(row, col, color, piece, board)
       moves = []
       # downward
       (row + 1).upto(7) do |current_row|
-        break if board.friendly_at?(piece.color, current_row, col)
+        break if board.friendly_at?(color, current_row, col)
 
         moves << [current_row, col]
-        break if board.enemy_at?(piece.color, current_row, col)
+        break if board.enemy_at?(color, current_row, col)
       end
 
       # upward
       (row - 1).downto(0) do |current_row|
-        break if board.friendly_at?(piece.color, current_row, col)
+        break if board.friendly_at?(color, current_row, col)
 
         moves << [current_row, col]
-        break if board.enemy_at?(piece.color, current_row, col)
+        break if board.enemy_at?(color, current_row, col)
       end
       # rightward
       (col + 1).upto(7) do |current_column|
-        break if board.friendly_at?(piece.color, row, current_column)
+        break if board.friendly_at?(color, row, current_column)
 
         moves << [row, current_column]
-        break if board.enemy_at?(piece.color, row, current_column)
+        break if board.enemy_at?(color, row, current_column)
       end
       # leftward
       (col - 1).downto(0) do |current_column|
-        break if board.friendly_at?(piece.color, row, current_column)
+        break if board.friendly_at?(color, row, current_column)
 
         moves << [row, current_column]
-        break if board.enemy_at?(piece.color, row, current_column)
+        break if board.enemy_at?(color, row, current_column)
       end
       moves
     end
