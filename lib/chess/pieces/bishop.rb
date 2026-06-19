@@ -5,6 +5,11 @@ class Bishop
 
   BLACK_BISHOP = "\u2657"
   WHITE_BISHOP = "\u2657"
-  def initialize
+  def initialize(color, row, col, has_moved)
+    @color = color
+    @row = row
+    @column = col
+    @has_moved = false
   end
+  
 end
