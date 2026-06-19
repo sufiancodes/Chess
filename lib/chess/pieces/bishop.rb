@@ -11,5 +11,12 @@ class Bishop
     @column = col
     @has_moved = false
   end
-  
+
+  def to_s
+    @color == "black" ? BLACK_BISHOP : WHITE_BISHOP
+  end
+
+  def enemy_color
+    @color == "white" ? "black" : "white"
+  end
 end
