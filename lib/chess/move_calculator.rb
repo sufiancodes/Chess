@@ -14,6 +14,8 @@ module MoveCalculator
         calculate_knight_moves(row, col, color, piece, board)
       when Rook
         calculate_rook_moves(row, col, color, piece, board)
+      when Bishop
+        calculate_bishop_moves(row, col, color, piece, board)
       end
     end
 
@@ -31,7 +33,21 @@ module MoveCalculator
 
     private
 
-    # For Black rook move calculation
+    # For bishop moves calculation
+    def calculate_bishop_moves(row, col, color, piece, board)
+      moves = []
+      # down right diagonal
+      (row + 1).upto(7) do |current_row|
+        col += 1
+        break if board.friendly_at?(color, current_row, col)
+
+        moves << [current_row, col]
+        break if board.enemy_at?(color, current_row, col)
+      end
+      moves
+    end
+
+    # For rook moves calculation
     def calculate_rook_moves(row, col, color, piece, board)
       moves = []
       # downward
