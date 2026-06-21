@@ -36,7 +36,7 @@ module MoveCalculator
     # For bishop moves calculation
     def calculate_bishop_moves(row, col, color, piece, board)
       moves = []
-      # down right diagonal
+      # # down right diagonal
       (row + 1).upto(7) do |current_row|
         col += 1
         break if board.friendly_at?(color, current_row, col)
@@ -44,7 +44,7 @@ module MoveCalculator
         moves << [current_row, col]
         break if board.enemy_at?(color, current_row, col)
       end
-      # down left diagonal
+      # # down left diagonal
       (row + 1).upto(7) do |current_row|
         col -= 1
         break if board.friendly_at?(color, current_row, col)
@@ -52,6 +52,17 @@ module MoveCalculator
         moves << [current_row, col]
         break if board.enemy_at?(color, current_row, col)
       end
+
+      # upright diagonal
+      (row - 1).downto(0) do |current_row|
+        col += 1
+        break if board.friendly_at?(color, current_row, col)
+
+        moves << [current_row, col]
+        break if board.enemy_at?(color, current_row, col)
+      end
+
+      
       moves
       # ok now that the rook is middle stage is set for all of it moves calculation
     end
