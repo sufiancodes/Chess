@@ -13,4 +13,8 @@ class Queen
   def to_s
     @color == "black" ? BLACK_QUEEN : WHITE_QUEEN
   end
+
+  def enemy_color
+    @color == "white" ? "black" : "white"
+  end
 end
