@@ -16,7 +16,16 @@ module MoveCalculator
         calculate_rook_moves(row, col, color, piece, board)
       when Bishop
         calculate_bishop_moves(row, col, color, piece, board)
+      when Queen
+        calculate_queen_moves(row, col, color, piece, board)
       end
+    end
+
+    def calculate_queen_moves(row, col, color, piece, board)
+      moves = []
+      # queen is basically rook + bishop
+      moves << calculate_bishop_moves(row, col, piece, board)
+      moves << calculate_rook_moves(row, col, piece, board)
     end
 
     def calculate_pawn_moves(row, col, color, piece, board)
@@ -71,7 +80,6 @@ module MoveCalculator
         break if board.enemy_at?(color, current_row, col)
       end
       moves
-      # ok now that the rook is middle stage is set for all of it moves calculation
     end
 
     # For rook moves calculation
