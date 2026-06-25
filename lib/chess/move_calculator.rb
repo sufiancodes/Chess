@@ -27,7 +27,6 @@ module MoveCalculator
       moves << calculate_bishop_moves(row, col, color, piece, board)
       moves << calculate_rook_moves(row, col, color, piece, board)
       moves.flatten(1)
-      # this nay not work
     end
 
     def calculate_pawn_moves(row, col, color, piece, board)
