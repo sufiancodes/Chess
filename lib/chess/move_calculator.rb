@@ -24,8 +24,10 @@ module MoveCalculator
     def calculate_queen_moves(row, col, color, piece, board)
       moves = []
       # queen is basically rook + bishop
-      moves << calculate_bishop_moves(row, col, piece, board)
-      moves << calculate_rook_moves(row, col, piece, board)
+      moves << calculate_bishop_moves(row, col, color, piece, board)
+      moves << calculate_rook_moves(row, col, color, piece, board)
+      moves.flatten(1)
+      # this nay not work
     end
 
     def calculate_pawn_moves(row, col, color, piece, board)
@@ -46,38 +48,42 @@ module MoveCalculator
     def calculate_bishop_moves(row, col, color, piece, board)
       moves = []
       # down right diagonal
+      current_column = col
       (row + 1).upto(7) do |current_row|
-        col += 1
-        break if board.friendly_at?(color, current_row, col)
+        current_column += 1
+        break if board.friendly_at?(color, current_row, current_column)
 
-        moves << [current_row, col]
-        break if board.enemy_at?(color, current_row, col)
+        moves << [current_row, current_column]
+        break if board.enemy_at?(color, current_row, current_column)
       end
       # # down left diagonal
+      current_column = col
       (row + 1).upto(7) do |current_row|
-        col -= 1
-        break if board.friendly_at?(color, current_row, col)
+        current_column -= 1
+        break if board.friendly_at?(color, current_row, current_column)
 
-        moves << [current_row, col]
-        break if board.enemy_at?(color, current_row, col)
+        moves << [current_row, current_column]
+        break if board.enemy_at?(color, current_row, current_column)
       end
 
       # upright diagonal
+      current_column = col
       (row - 1).downto(0) do |current_row|
-        col += 1
-        break if board.friendly_at?(color, current_row, col)
+        current_column += 1
+        break if board.friendly_at?(color, current_row, current_column)
 
-        moves << [current_row, col]
-        break if board.enemy_at?(color, current_row, col)
+        moves << [current_row, current_column]
+        break if board.enemy_at?(color, current_row, current_column)
       end
 
       # upleft diagonal
+      current_column = col
       (row - 1).downto(0) do |current_row|
-        col -= 1
-        break if board.friendly_at?(color, current_row, col)
+        current_column -= 1
+        break if board.friendly_at?(color, current_row, current_column)
 
-        moves << [current_row, col]
-        break if board.enemy_at?(color, current_row, col)
+        moves << [current_row, current_column]
+        break if board.enemy_at?(color, current_row, current_column)
       end
       moves
     end
