@@ -18,12 +18,30 @@ module MoveCalculator
         calculate_bishop_moves(row, col, color, piece, board)
       when Queen
         calculate_queen_moves(row, col, color, piece, board)
+      when King
+        calculate_king_moves(row, col, color, piece, board)
       end
+    end
+
+    private
+
+    def calculate_king_moves(row, col, color, piece, board)
+      moves = []
+      # vertical_squares
+      moves << [row + 1, col] if board.empty_at?(row + 1, col)
+      moves << [row - 1, col] if board.empty_at?(row - 1, col)
+      # horizontal_square
+      moves << [row, col + 1] if board.empty_at?(row, col + 1)
+      moves << [row, col - 1] if board.empty_at?(row, col - 1)
+      # diagonal_square
+      moves << [row + 1, col + 1] if board.empty_at?(row + 1, col + 1)
+      moves << [row + 1, col - 1] if board.empty_at?(row + 1, col - 1)
+      moves << [row - 1, col + 1] if board.empty_at?(row - 1, col + 1)
+      moves << [row - 1, col - 1] if board.empty_at?(row - 1, col - 1)
     end
 
     def calculate_queen_moves(row, col, color, piece, board)
       moves = []
-      # queen is basically rook + bishop
       moves << calculate_bishop_moves(row, col, color, piece, board)
       moves << calculate_rook_moves(row, col, color, piece, board)
       moves.flatten(1)
@@ -40,8 +58,6 @@ module MoveCalculator
     def calculate_knight_moves(row, col, color, piece, board)
       knight_moves(row, col, piece, board)
     end
-
-    private
 
     # For bishop moves calculation
     def calculate_bishop_moves(row, col, color, piece, board)
