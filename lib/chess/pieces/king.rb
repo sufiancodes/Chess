@@ -15,4 +15,8 @@ class King
   def to_s
     @color == "black" ? BLACK_KING : WHITE_KING
   end
+
+  def enemy_color
+    @color == "white" ? "black" : "white"
+  end
 end
