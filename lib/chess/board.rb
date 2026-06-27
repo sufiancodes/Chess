@@ -66,7 +66,23 @@ class Board
     @board[from[0]][from[1]] = EMPTY_SPOT
   end
 
+  def square_under_attack?(row, col, enemy_color)
+    # now here I will iterate our all board pieces where color == enemy color then generate their moves
+    
+  end
+
+
   private
+
+  def collect_all_enemy_pieces(enemy_color)
+    enemies = []
+    @board.each do |row|
+      row.each do |piece|
+        enemies.push(piece) if !piece.is_a?(String) && piece.color == enemy_color
+      end
+    end
+    enemies
+  end
 
   def populate_board
     @board[0] =
@@ -119,6 +135,7 @@ end
 
 board = Board.new
 puts board
+board.square_under_attack?(4, 3, "black")
 # # puts board.empty_at?(1,0)
 # puts board.enemy_at?("black", 7, 0)
 # puts board.piece_at(2, 0).class
