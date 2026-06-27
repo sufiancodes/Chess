@@ -4,6 +4,9 @@ require_relative "move_calculator"
 require_relative "pieces/pawn"
 require_relative "pieces/knight"
 require_relative "pieces/rook"
+require_relative "pieces/bishop"
+require_relative "pieces/queen"
+require_relative "pieces/king"
 # All logic related to board
 class Board
   include MoveCalculator
@@ -15,7 +18,7 @@ class Board
   end
 
   def to_s
-    col_alphabets = "\n a b c d e f g h"
+    col_alphabets = "\n  a b c d e f g h"
     row_numbers = [8, 7, 6, 5, 4, 3, 2, 1]
     @board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(" ").to_s }.join("\n") + col_alphabets
   end
@@ -46,6 +49,7 @@ class Board
 
     true if piece.color == own_color
   end
+
   def column(col)
     rotated_board = @board.transpose
     rotated_board[col]
@@ -69,16 +73,16 @@ class Board
       [
         Rook.new("black", 0, 0, false),
         Knight.new("black", 0, 1),
-        "\u2657",
-        "\u2654",
-        "\u2655",
-        "\u2657",
+        Bishop.new("black", 0, 2, false),
+        King.new("black", 0, 3, false),
+        Queen.new("black", 0, 4, false),
+        Bishop.new("black", 0, 5, false),
         Knight.new("black", 0, 6),
         Rook.new("black", 0, 7, false),
       ]
     @board[1] =
       [
-        EMPTY_SPOT,
+        Pawn.new("black", 0, 0, false),
         Pawn.new("black", 1, 1, false),
         Pawn.new("black", 1, 2, false),
         Pawn.new("black", 1, 3, false),
@@ -87,6 +91,7 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
+    @board[4][3] = King.new("black", 4, 4, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
@@ -102,10 +107,10 @@ class Board
       [
         Rook.new("white", 7, 0, false),
         Knight.new("white", 7, 1),
-        "\u265D",
-        "\u265A",
-        "\u265B",
-        "\u265D",
+        Bishop.new("white", 7, 2, false),
+        King.new("white", 7, 3, false),
+        Queen.new("white", 7, 4, false),
+        Bishop.new("white", 7, 5, false),
         Knight.new("white", 7, 6),
         Rook.new("white", 7, 7, false),
       ]
@@ -115,4 +120,20 @@ end
 board = Board.new
 puts board
 # # puts board.empty_at?(1,0)
-puts board.enemy_at?("black", 7, 0)
+# puts board.enemy_at?("black", 7, 0)
+# puts board.piece_at(2, 0).class
+# puts board.piece_at(0, 0).class
+#
+# moves = []
+# row = 4
+# col = 0
+# # down right diagonal
+# (row - 1).downto(0) do |current_row|
+#   # puts current_row
+#   # puts col + 1
+#   col -= 1
+#   moves << [current_row, col]
+#   p moves
+#   # break if row == 7
+# end
+# puts moves
