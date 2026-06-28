@@ -8,7 +8,7 @@ class King
   def initialize(color, row, col, has_moved)
     @color = color
     @row = row
-    @column = col
+    @col = col
     @has_moved = false
   end
 

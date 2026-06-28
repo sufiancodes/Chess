@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class Queen
+  attr_reader :color, :row, :col
+
   BLACK_QUEEN = "\u2655"
   WHITE_QUEEN = "\u265B"
   def initialize(color, row, col, has_moved)
     @color = color
     @row = row
-    @column = col
+    @col = col
     @has_moved = false
   end
 
