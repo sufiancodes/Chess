@@ -67,13 +67,11 @@ class Board
   end
 
   def square_under_attack?(row, col, enemy_color)
-    # now here I will iterate our all board pieces where color == enemy color then generate their moves
     moves = []
     enemies = collect_all_enemy_pieces(enemy_color)
     enemies.each do |enemy|
       moves.push(possible_moves_from([enemy.row, enemy.col]))
     end
-    p moves
   end
 
   private
@@ -81,9 +79,7 @@ class Board
   def collect_all_enemy_pieces(enemy_color)
     enemies = []
     @board.each do |row|
-      row.each do |piece|
-        enemies.push(piece) if !piece.is_a?(String) && piece.color == enemy_color
-      end
+      row.each { |it| enemies.push(it) if !it.is_a?(String) && it.color == enemy_color }
     end
     enemies
   end
@@ -141,7 +137,7 @@ end
 
 board = Board.new
 puts board
-board.square_under_attack?(4, 3, "black")
+board.square_under_attack?(2, 2, "black")
 # # puts board.empty_at?(1,0)
 # puts board.enemy_at?("black", 7, 0)
 # puts board.piece_at(2, 0).class
