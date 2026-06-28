@@ -69,9 +69,7 @@ class Board
   def square_under_attack?(row, col, enemy_color)
     moves = []
     enemies = collect_all_enemy_pieces(enemy_color)
-    enemies.each do |enemy|
-      moves.push(possible_moves_from([enemy.row, enemy.col]))
-    end
+    enemies.each { |enemy| moves.push(possible_moves_from([enemy.row, enemy.col])) }
   end
 
   private
@@ -79,7 +77,7 @@ class Board
   def collect_all_enemy_pieces(enemy_color)
     enemies = []
     @board.each do |row|
-      row.each { |it| enemies.push(it) if !it.is_a?(String) && it.color == enemy_color }
+      row.each { |piece| enemies.push(piece) if !piece.is_a?(String) && piece.color == enemy_color }
     end
     enemies
   end
