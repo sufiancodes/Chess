@@ -68,9 +68,13 @@ class Board
 
   def square_under_attack?(row, col, enemy_color)
     # now here I will iterate our all board pieces where color == enemy color then generate their moves
-    
+    moves = []
+    enemies = collect_all_enemy_pieces(enemy_color)
+    enemies.each do |enemy|
+      moves.push(possible_moves_from([enemy.row, enemy.col]))
+    end
+    p moves
   end
-
 
   private
 
@@ -90,7 +94,8 @@ class Board
         Rook.new("black", 0, 0, false),
         Knight.new("black", 0, 1),
         Bishop.new("black", 0, 2, false),
-        King.new("black", 0, 3, false),
+        # King.new("black", 0, 3, false)
+        EMPTY_SPOT,
         Queen.new("black", 0, 4, false),
         Bishop.new("black", 0, 5, false),
         Knight.new("black", 0, 6),
@@ -98,7 +103,7 @@ class Board
       ]
     @board[1] =
       [
-        Pawn.new("black", 0, 0, false),
+        Pawn.new("black", 1, 0, false),
         Pawn.new("black", 1, 1, false),
         Pawn.new("black", 1, 2, false),
         Pawn.new("black", 1, 3, false),
@@ -107,7 +112,7 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
-    @board[4][3] = King.new("black", 4, 4, false)
+    # @board[4][3] = King.new("black", 4, 4, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
@@ -124,7 +129,8 @@ class Board
         Rook.new("white", 7, 0, false),
         Knight.new("white", 7, 1),
         Bishop.new("white", 7, 2, false),
-        King.new("white", 7, 3, false),
+        # King.new("white", 7, 3, false)
+        EMPTY_SPOT,
         Queen.new("white", 7, 4, false),
         Bishop.new("white", 7, 5, false),
         Knight.new("white", 7, 6),
