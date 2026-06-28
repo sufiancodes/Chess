@@ -70,6 +70,8 @@ class Board
     moves = []
     enemies = collect_all_enemy_pieces(enemy_color)
     enemies.each { |enemy| moves.push(possible_moves_from([enemy.row, enemy.col])) }
+    enemy_moves = moves.flatten(1)
+    enemy_moves.include?([row, col])
   end
 
   private
