@@ -69,9 +69,22 @@ class Board
   def square_under_attack?(row, col, enemy_color)
     moves = []
     enemies = collect_all_enemy_pieces(enemy_color)
-    enemies.each { |enemy| moves.push(possible_moves_from([enemy.row, enemy.col])) }
+    enemies.each do |enemy|
+      if enemy.instance_of?(Pawn)
+        moves << pawn_attack_moves(enemy.row, enemy.col, enemy)
+      else
+        moves.push(possible_moves_from([enemy.row, enemy.col]))
+      end
+    end
     enemy_moves = moves.flatten(1)
     enemy_moves.include?([row, col])
+  end
+
+  def pawn_attack_moves(row, col, enemy)
+    moves = []
+    moves.push([enemy.row - 1, enemy.col + 1])
+    moves.push([enemy.row - 1, enemy.col - 1])
+    moves
   end
 
   private
@@ -90,8 +103,7 @@ class Board
         Rook.new("black", 0, 0, false),
         Knight.new("black", 0, 1),
         Bishop.new("black", 0, 2, false),
-        # King.new("black", 0, 3, false)
-        EMPTY_SPOT,
+        King.new("black", 0, 3, false),
         Queen.new("black", 0, 4, false),
         Bishop.new("black", 0, 5, false),
         Knight.new("black", 0, 6),
@@ -108,7 +120,7 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
-    # @board[4][3] = King.new("black", 4, 4, false)
+    @board[4][3] = King.new("black", 4, 4, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
@@ -137,7 +149,8 @@ end
 
 board = Board.new
 puts board
-board.square_under_attack?(2, 2, "black")
+puts board.square_under_attack?(4, 2, "white")
+
 # # puts board.empty_at?(1,0)
 # puts board.enemy_at?("black", 7, 0)
 # puts board.piece_at(2, 0).class
@@ -156,3 +169,5 @@ board.square_under_attack?(2, 2, "black")
 #   # break if row == 7
 # end
 # puts moves
+# now after this sort king works fine I need to implement two method on board check_mate? and over?
+# ok so here is the blunder I am generating all moves for all pieces in square under attack here in this case king cant move on sides bcz of that method but pawn can only capture diagonally but due to this this happen
