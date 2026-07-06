@@ -71,7 +71,7 @@ class Board
     enemies = collect_all_enemy_pieces(enemy_color)
     enemies.each do |enemy|
       if enemy.instance_of?(Pawn)
-        moves << pawn_attack_moves(enemy.row, enemy.col, enemy)
+        moves << pawn_attack_moves(enemy)
       else
         moves.push(possible_moves_from([enemy.row, enemy.col]))
       end
@@ -80,10 +80,13 @@ class Board
     enemy_moves.include?([row, col])
   end
 
-  def pawn_attack_moves(row, col, enemy)
+  def pawn_attack_moves(enemy)
     moves = []
-    moves.push([enemy.row - 1, enemy.col + 1])
-    moves.push([enemy.row - 1, enemy.col - 1])
+    direction = enemy.color == "white" ? -1 : +1
+    [-1, + 1].each do |delta|
+      column = enemy.col + delta
+      moves.push([enemy.row + direction, column]) if column.between?(0, 7) && (enemy.row + direction).between?(0, 7)
+    end
     moves
   end
 
