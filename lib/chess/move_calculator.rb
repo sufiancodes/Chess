@@ -29,16 +29,17 @@ module MoveCalculator
       moves = []
       # # king can move when the square is empty not under attack and not a friendly piece
       # # vertical_squares
-      moves << [row + 1, col] if !board.friendly_at?(piece.color, row + 1, col) && !board.square_under_attack?(row + 1, col, piece.enemy_color)
-      moves << [row - 1, col] if !board.friendly_at?(piece.color, row - 1, col) && !board.square_under_attack?(row - 1, col, piece.enemy_color)
+      moves << [row + 1, col] if (row + 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col) && !board.square_under_attack?(row + 1, col, piece.enemy_color)
+      moves << [row - 1, col] if (row - 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col) && !board.square_under_attack?(row - 1, col, piece.enemy_color)
       # # horizontal_square
-      moves << [row, col + 1] if !board.friendly_at?(piece.color, row, col + 1) && !board.square_under_attack?(row, col + 1, piece.enemy_color)
-      moves << [row, col - 1] if !board.friendly_at?(piece.color, row, col - 1) && !board.square_under_attack?(row, col - 1, piece.enemy_color)
+      moves << [row, col + 1] if (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row, col + 1) && !board.square_under_attack?(row, col + 1, piece.enemy_color)
+      moves << [row, col - 1] if (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row, col - 1) && !board.square_under_attack?(row, col - 1, piece.enemy_color)
       # # diagonal_square
-      moves << [row + 1, col + 1] if !board.friendly_at?(piece.color, row + 1, col + 1) && !board.square_under_attack?(row + 1, col + 1, piece.enemy_color)
-      moves << [row + 1, col - 1] if !board.friendly_at?(piece.color, row + 1, col - 1) && !board.square_under_attack?(row + 1, col - 1, piece.enemy_color)
-      moves << [row - 1, col + 1] if !board.friendly_at?(piece.color, row - 1, col + 1) && !board.square_under_attack?(row - 1, col + 1, piece.enemy_color)
-      moves << [row - 1, col - 1] if !board.friendly_at?(piece.color, row - 1, col - 1) && !board.square_under_attack?(row - 1, col - 1, piece.enemy_color)
+      moves << [row + 1, col + 1] if (row + 1).between?(0, 7) && (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col + 1) && !board.square_under_attack?(row + 1, col + 1, piece.enemy_color)
+      moves << [row + 1, col - 1] if (row + 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col - 1) && !board.square_under_attack?(row + 1, col - 1, piece.enemy_color)
+      moves << [row - 1, col + 1] if (row - 1).between?(0, 7) && (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col + 1) && !board.square_under_attack?(row - 1, col + 1, piece.enemy_color)
+      moves << [row - 1, col - 1] if (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col - 1) && !board.square_under_attack?(row - 1, col - 1, piece.enemy_color)
+      moves
     end
 
     def calculate_queen_moves(row, col, color, piece, board)
