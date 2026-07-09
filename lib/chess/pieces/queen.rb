@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Queen
-  attr_reader :color, :row, :col
+  attr_reader :color
+  attr_accessor :has_moved, :row, :col
 
   BLACK_QUEEN = "\u2655"
   WHITE_QUEEN = "\u265B"

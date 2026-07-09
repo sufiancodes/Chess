@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class King
-  attr_reader :color, :row, :col
+  attr_reader :color
+  attr_accessor :has_moved, :row, :col
 
   WHITE_KING = "\u265A"
   BLACK_KING = "\u2654"

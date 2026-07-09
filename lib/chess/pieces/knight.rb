@@ -2,7 +2,9 @@
 
 # this class will have all data related to knight
 class Knight
-  attr_reader :color, :row, :col
+  attr_reader :color
+  attr_accessor :has_moved, :row, :col
+
 
   BLACK_KNIGHT = "\u2658"
   WHITE_KNIGHT = "\u265E"

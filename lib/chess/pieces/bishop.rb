@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Bishop
-  attr_reader :color, :row, :col
+  attr_reader :color
+  attr_accessor :has_moved, :row, :col
 
   BLACK_BISHOP = "\u2657"
   WHITE_BISHOP = "\u2657"

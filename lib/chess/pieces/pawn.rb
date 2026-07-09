@@ -5,8 +5,8 @@ class Pawn
   WHITE_PAWN = "\u265f"
   BLACK_PAWN = "\u2659"
 
-  attr_reader :color, :row, :col
-  attr_accessor :has_moved
+  attr_reader :color
+  attr_accessor :has_moved, :row, :col
 
   def initialize(color, row, col, has_moved)
     @color = color
