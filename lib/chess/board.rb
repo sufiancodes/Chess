@@ -90,6 +90,10 @@ class Board
     moves
   end
 
+  def check_mate?(piece)
+    check?(piece) && possible_moves_from([piece.row, piece.col]).empty?
+  end
+
   def check?(piece)
     square_under_attack?(piece.row, piece.col, piece.enemy_color)
   end
@@ -116,7 +120,7 @@ class Board
         Knight.new("black", 0, 6),
         Rook.new("black", 0, 7, false),
       ]
-
+    # @board[4][3] = Queen.new("black", 4, 3, false)
     @board[1] =
       [
         Pawn.new("black", 1, 0, false),
@@ -156,5 +160,6 @@ end
 board = Board.new
 puts board
 king = board.piece_at(7, 3)
-puts board.check?(king)
+# puts board.check?(king)
+p board.check_mate?(king)
 # now after this sort king works fine I need to implement two method on board check_mate? and over?
