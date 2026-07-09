@@ -90,6 +90,10 @@ class Board
     moves
   end
 
+  def check?(piece)
+    square_under_attack?(piece.row, piece.col, piece.enemy_color)
+  end
+
   private
 
   def collect_all_enemy_pieces(enemy_color)
@@ -112,6 +116,7 @@ class Board
         Knight.new("black", 0, 6),
         Rook.new("black", 0, 7, false),
       ]
+
     @board[1] =
       [
         Pawn.new("black", 1, 0, false),
@@ -123,7 +128,6 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
-    @board[4][3] = King.new("black", 4, 4, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
@@ -140,8 +144,7 @@ class Board
         Rook.new("white", 7, 0, false),
         Knight.new("white", 7, 1),
         Bishop.new("white", 7, 2, false),
-        # King.new("white", 7, 3, false)
-        EMPTY_SPOT,
+        King.new("white", 7, 3, false),
         Queen.new("white", 7, 4, false),
         Bishop.new("white", 7, 5, false),
         Knight.new("white", 7, 6),
@@ -152,25 +155,6 @@ end
 
 board = Board.new
 puts board
-puts board.square_under_attack?(4, 2, "white")
-
-# # puts board.empty_at?(1,0)
-# puts board.enemy_at?("black", 7, 0)
-# puts board.piece_at(2, 0).class
-# puts board.piece_at(0, 0).class
-#
-# moves = []
-# row = 4
-# col = 0
-# # down right diagonal
-# (row - 1).downto(0) do |current_row|
-#   # puts current_row
-#   # puts col + 1
-#   col -= 1
-#   moves << [current_row, col]
-#   p moves
-#   # break if row == 7
-# end
-# puts moves
+king = board.piece_at(7, 3)
+puts board.check?(king)
 # now after this sort king works fine I need to implement two method on board check_mate? and over?
-# ok so here is the blunder I am generating all moves for all pieces in square under attack here in this case king cant move on sides bcz of that method but pawn can only capture diagonally but due to this this happen
