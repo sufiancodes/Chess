@@ -92,12 +92,19 @@ class Board
     moves
   end
 
-  def check_mate?(piece)
-    check?(piece) && possible_moves_from([piece.row, piece.col]).empty?
+  def find_enemy_king(color)
+    king = nil
+    pieces = collect_all_enemy_pieces(color)
+    pieces.each { |piece| king = piece if piece.instance_of?(King) }
+    king
   end
 
-  def check?(piece)
-    square_under_attack?(piece.row, piece.col, piece.enemy_color)
+  def check_mate?(king)
+    check?(king) && possible_moves_from([king.row, king.col]).empty?
+  end
+
+  def check?(king)
+    square_under_attack?(king.row, king.col, king.enemy_color)
   end
 
   private
@@ -160,6 +167,8 @@ end
 
 board = Board.new
 puts board
+board.find_enemy_king("white")
+
 # pawn = board.piece_at(6, 3)
 # puts pawn.row
 # puts pawn.col
@@ -170,4 +179,4 @@ puts board
 # puts pawna.col
 # puts board.check?(king)
 # p board.check_mate?(king)
-# now after this sort king works fine I need to implement two method on board check_mate? and over?
+# now after this sort king works fine I need to implement over? method perhaps
