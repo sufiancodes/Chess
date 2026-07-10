@@ -62,8 +62,8 @@ class Board
   def move_piece(from, to)
     piece = @board[from[0]][from[1]]
     piece.has_moved = true if piece.instance_of?(Pawn)
-    piece.row = [to[0]]
-    piece.col = [to[1]]
+    piece.row = to[0]
+    piece.col = to[1]
     @board[to[0]][to[1]] = piece
     @board[from[0]][from[1]] = EMPTY_SPOT
   end
@@ -165,9 +165,9 @@ class Board
   end
 end
 
-board = Board.new
-puts board
-board.find_enemy_king("white")
+# board = Board.new
+# puts board
+# board.find_enemy_king("white")
 
 # pawn = board.piece_at(6, 3)
 # puts pawn.row
@@ -175,8 +175,8 @@ board.find_enemy_king("white")
 # board.move_piece([6, 3], [5, 3])
 # puts board
 # pawna = board.piece_at(5, 3)
-# puts pawna.row
-# puts pawna.col
+# p pawna.row
+# p pawna.col
 # puts board.check?(king)
 # p board.check_mate?(king)
 # now after this sort king works fine I need to implement over? method perhaps
