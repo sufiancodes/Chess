@@ -37,7 +37,7 @@ class Board
 
   def enemy_at?(own_color, row, col)
     piece = piece_at(row, col)
-    return false if piece.is_a?(String)
+    return false if piece.is_a?(String) || piece.nil?
 
     enemy_color = piece.color
     own_color.eql?(enemy_color) ? false : true
@@ -45,7 +45,7 @@ class Board
 
   def friendly_at?(own_color, row, col)
     piece = piece_at(row, col)
-    return false if piece.is_a?(String)
+    return false if piece.is_a?(String) || piece.nil?
 
     true if piece.color == own_color
   end
@@ -165,8 +165,10 @@ class Board
   end
 end
 
-# board = Board.new
-# puts board
+board = Board.new
+puts board
+king = board.piece_at(7, 3)
+puts board.check_mate?(king)
 # board.find_enemy_king("white")
 
 # pawn = board.piece_at(6, 3)
