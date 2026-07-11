@@ -69,6 +69,7 @@ module MoveCalculator
       (row + 1).upto(7) do |current_row|
         current_column += 1
         break if board.friendly_at?(color, current_row, current_column)
+        break unless current_column.between?(0, 7)
 
         moves << [current_row, current_column]
         break if board.enemy_at?(color, current_row, current_column)
@@ -78,6 +79,7 @@ module MoveCalculator
       (row + 1).upto(7) do |current_row|
         current_column -= 1
         break if board.friendly_at?(color, current_row, current_column)
+        break unless current_column.between?(0, 7)
 
         moves << [current_row, current_column]
         break if board.enemy_at?(color, current_row, current_column)
@@ -88,6 +90,7 @@ module MoveCalculator
       (row - 1).downto(0) do |current_row|
         current_column += 1
         break if board.friendly_at?(color, current_row, current_column)
+        break unless current_column.between?(0, 7)
 
         moves << [current_row, current_column]
         break if board.enemy_at?(color, current_row, current_column)
@@ -98,6 +101,7 @@ module MoveCalculator
       (row - 1).downto(0) do |current_row|
         current_column -= 1
         break if board.friendly_at?(color, current_row, current_column)
+        break unless current_column.between?(0, 7)
 
         moves << [current_row, current_column]
         break if board.enemy_at?(color, current_row, current_column)
