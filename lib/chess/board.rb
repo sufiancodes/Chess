@@ -74,6 +74,8 @@ class Board
     enemies.each do |enemy|
       if enemy.instance_of?(Pawn)
         moves << pawn_attack_moves(enemy)
+      elsif enemy.instance_of?(King)
+        moves << king_attack_move(enemy)
       else
         moves.push(possible_moves_from([enemy.row, enemy.col]))
       end
@@ -165,10 +167,10 @@ class Board
   end
 end
 
-board = Board.new
-puts board
-king = board.piece_at(7, 3)
-puts board.check_mate?(king)
+# board = Board.new
+# puts board
+# king = board.piece_at(7, 3)
+# puts board.check_mate?(king)
 # board.find_enemy_king("white")
 
 # pawn = board.piece_at(6, 3)
