@@ -94,6 +94,23 @@ class Board
     moves
   end
 
+  def king_attack_squares(enemy_king)
+    attacked_squares = []
+
+    (-1..1).each do |row_offset|
+      (-1..1).each do |col_offset|
+        next if row_offset.zero? && col_offset.zero?
+
+        target_row = enemy_king.row + row_offset
+        target_col = enemy_king.col + col_offset
+
+        attacked_squares << [target_row, target_col] if target_row.between?(0, 7) && target_col.between?(0, 7)
+      end
+    end
+
+    attacked_squares
+  end
+
   def find_enemy_king(color)
     king = nil
     pieces = collect_all_enemy_pieces(color)
