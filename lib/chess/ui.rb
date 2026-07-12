@@ -1,10 +1,31 @@
 # frozen_string_literal: true
-require_relative 'board'
+
+require_relative "board"
 # this class deals with UI player input etc
 class UI
   def display(board)
     @board = board
     puts board
+  end
+
+  def translate_user_input(position)
+    col = { "a" => 0, "b" => 1, "c" => 2, "d" => 3, "e" => 4, "f" => 5, "g" => 6, "h" => 7 }
+    row = { "1" => 7, "2" => 6, "3" => 5, "4" => 4, "5" => 3, "6" => 2, "7" => 1, "8" => 0 }
+    create_useable_array(position, col, row)
+  end
+
+  def translate_computer_input(array)
+    col_map = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    row_map = ["8", "7", "6", "5", "4", "3", "2", "1"]
+    row_index, col_index = array
+    (col_map[col_index] + row_map[row_index]).to_s
+  end
+
+  def create_useable_array(position, col_alphabets, row_numbers)
+    pos = position.split("")
+    column = pos[0]
+    row = pos[1]
+    result = [row_numbers[row], col_alphabets[column]]
   end
 end
 board = Board.new
