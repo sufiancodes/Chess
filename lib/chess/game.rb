@@ -16,13 +16,13 @@ class Game
 
   def play
     @player.welcome
+    puts @board
     loop do
-      puts @board
       puts "#{player.current_player}: Please chose the piece you wish to move"
       input = gets.chomp
 
       # translating stage
-      array = translate_user_input(input)
+      array = @ui.translate_user_input(input)
       moves = @board.possible_moves_from(array)
 
       # re prompting when no move available
@@ -33,11 +33,12 @@ class Game
       puts "Now select the move from below you wish to play"
 
       # showing user possible moves
-      moves.each { |element| print translate_computer_input(element) + " "  }
+      moves.each { |element| print(@ui.translate_computer_input(element) + " ") }
 
       # processing user move
+      puts " "
       ip = gets.chomp
-      destination = translate_user_input(ip)
+      destination = @ui.translate_user_input(ip)
       @board.move_piece(array, destination)
 
       # finding enemy king
