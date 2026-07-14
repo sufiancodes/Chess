@@ -4,8 +4,9 @@ require_relative "board"
 # this class deals with UI player input etc
 class UI
   def display(board)
-    @board = board
-    puts board
+    col_alphabets = "\n  a b c d e f g h"
+    row_numbers = [8, 7, 6, 5, 4, 3, 2, 1]
+    puts board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(" ").to_s }.join("\n") + col_alphabets
   end
 
   def translate_user_input(position)
@@ -28,6 +29,3 @@ class UI
     result = [row_numbers[row], col_alphabets[column]]
   end
 end
-board = Board.new
-mui = UI.new
-mui.display(board)
