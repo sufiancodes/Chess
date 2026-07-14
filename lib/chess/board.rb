@@ -9,18 +9,14 @@ require_relative "pieces/queen"
 require_relative "pieces/king"
 # All logic related to board
 class Board
+  attr_reader :board
+
   include MoveCalculator
 
   EMPTY_SPOT = "\u2610"
   def initialize
     @board = Array.new(8) { Array.new(8) { EMPTY_SPOT } }
     populate_board
-  end
-
-  def to_s
-    col_alphabets = "\n  a b c d e f g h"
-    row_numbers = [8, 7, 6, 5, 4, 3, 2, 1]
-    @board.map.with_index { |row, index| "#{row_numbers[index]} " + row.join(" ").to_s }.join("\n") + col_alphabets
   end
 
   def piece_at(row, col)
@@ -75,7 +71,7 @@ class Board
       if enemy.instance_of?(Pawn)
         moves << pawn_attack_moves(enemy)
       elsif enemy.instance_of?(King)
-        moves << king_attack_move(enemy)
+        moves << king_attack_moves(enemy)
       else
         moves.push(possible_moves_from([enemy.row, enemy.col]))
       end
@@ -94,7 +90,7 @@ class Board
     moves
   end
 
-  def king_attack_squares(enemy_king)
+  def king_attack_moves(enemy_king)
     attacked_squares = []
 
     (-1..1).each do |row_offset|
