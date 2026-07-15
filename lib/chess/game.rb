@@ -16,41 +16,48 @@ class Game
 
   def play
     @player.welcome
-    puts @board
+    @ui.display(@board.board)
     loop do
       puts "#{player.current_player}: Please chose the piece you wish to move"
       input = gets.chomp
+      source = @ui.translate_user_input(input)
 
-      # translating stage
-      array = @ui.translate_user_input(input)
-      moves = @board.possible_moves_from(array)
-
-      # re prompting when no move available
-      if moves.empty?
-        puts "no possible move available"
+      # listing moves
+      possible_moves = list_moves(source)
+      if possible_moves.nil?
+        puts "No possible moves here"
         redo
+      else
+        possible_moves
+        puts " "
       end
-      puts "Now select the move from below you wish to play"
 
-      # showing user possible moves
-      moves.each { |element| print(@ui.translate_computer_input(element) + " ") }
-
-      # processing user move
-      puts " "
-      ip = gets.chomp
-      destination = @ui.translate_user_input(ip)
-      @board.move_piece(array, destination)
+      take_move = gets.chomp
+      destination = @ui.translate_user_input(take_move)
+      @board.move_piece(source, destination)
 
       # finding enemy king
       piece = @board.piece_at(destination[0], destination[1])
       enemy_king = @board.find_enemy_king(piece.enemy_color)
 
       # showing board and switching player
-      puts @board
+      @ui.display(@board.board)
+
       # stop game if its checkmate
       break if @board.check_mate?(enemy_king)
 
       player.switch_player!
+    end
+  end
+
+  def list_moves(source)
+    moves = @board.possible_moves_from(source)
+    if moves.empty?
+      nil
+    else
+      # showing user possible moves
+      puts "Now select the move from below you wish to play"
+      moves.each { |element| print(@ui.translate_computer_input(element) + " ") }
     end
   end
 end
