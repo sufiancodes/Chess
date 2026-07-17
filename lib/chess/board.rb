@@ -7,9 +7,11 @@ require_relative "pieces/rook"
 require_relative "pieces/bishop"
 require_relative "pieces/queen"
 require_relative "pieces/king"
+require_relative "ui"
 # All logic related to board
 class Board
   attr_reader :board
+  attr_accessor :ui
 
   include MoveCalculator
 
@@ -17,6 +19,7 @@ class Board
   def initialize
     @board = Array.new(8) { Array.new(8) { EMPTY_SPOT } }
     populate_board
+    @ui = UI.new
   end
 
   def piece_at(row, col)
@@ -25,6 +28,14 @@ class Board
 
   def row(row)
     @board[row]
+  end
+
+  def display_board
+    ui.display(board)
+  end
+
+  def translate_it(array)
+    ui.translate_computer_input(array)
   end
 
   def empty_at?(row, col)
@@ -90,15 +101,15 @@ class Board
     moves
   end
 
-  def king_attack_moves(enemy_king)
+  def king_attack_moves(king)
     attacked_squares = []
 
     (-1..1).each do |row_offset|
       (-1..1).each do |col_offset|
         next if row_offset.zero? && col_offset.zero?
 
-        target_row = enemy_king.row + row_offset
-        target_col = enemy_king.col + col_offset
+        target_row = king.row + row_offset
+        target_col = king.col + col_offset
 
         attacked_squares << [target_row, target_col] if target_row.between?(0, 7) && target_col.between?(0, 7)
       end
@@ -116,6 +127,14 @@ class Board
 
   def check_mate?(king)
     check?(king) && possible_moves_from([king.row, king.col]).empty?
+    # and cant be blocked and cant be captured
+  end
+
+  def direction_of_check(king)
+    checking_square = []
+    nearby_square = king_attack_moves(king)
+    nearby_square.each { |square| checking_square.push(square) if square_under_attack?(square[0], square[1], king.enemy_color) }
+    checking_square
   end
 
   def check?(king)
@@ -155,13 +174,17 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
+    @board[3][3] = Queen.new("black", 3, 3, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
         Pawn.new("white", 6, 1, false),
-        Pawn.new("white", 6, 2, false),
-        Pawn.new("white", 6, 3, false),
-        Pawn.new("white", 6, 4, false),
+        # Pawn.new("white", 6, 2, false)
+        EMPTY_SPOT,
+        # Pawn.new("white", 6, 3, false)
+        EMPTY_SPOT,
+        # Pawn.new("white", 6, 4, false)
+        EMPTY_SPOT,
         Pawn.new("white", 6, 5, false),
         Pawn.new("white", 6, 6, false),
         Pawn.new("white", 6, 7, false),
@@ -180,8 +203,28 @@ class Board
   end
 end
 
-# board = Board.new
-# puts board
+# now after I fixed this (checkmate) I need to implement ent passant, castling, pawn promotion, serialization and then write tests and the project done.
+
+board = Board.new
+board.display_board
+# white_king = board.find_enemy_king("white")
+white_king = board.piece_at(7, 3)
+# puts white_king
+# puts board.check?(white_king)
+# puts board.check_mate?(white_king)
+# puts board.square_under_attack?(6, 2, "black")
+# puts board.square_under_attack?(6, 3, "black")
+# puts board.square_under_attack?(6, 4, "black")
+nb = board.direction_of_check(white_king)
+p nb
+nearby = []
+nb.each do |element|
+  nearby << board.translate_it(element)
+end
+p nearby
+# nb.translate_it(nb)
+# just call square under attack around all king's square where ever it return's true thats direction check is coming form
+
 # king = board.piece_at(7, 3)
 # puts board.check_mate?(king)
 # board.find_enemy_king("white")
@@ -196,4 +239,3 @@ end
 # p pawna.col
 # puts board.check?(king)
 # p board.check_mate?(king)
-# now after this sort king works fine I need to implement over? method perhaps
