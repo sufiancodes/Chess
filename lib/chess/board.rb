@@ -130,10 +130,16 @@ class Board
     # and cant be blocked and cant be captured
   end
 
-  def cant_be_blocked?(direction)
-    # checking_square
-    # collect all of own pieces and generate their moves if moves don't include checking square you are cooked
-    
+  def cant_be_blocked?(king)
+    # but this method has a bug it only care about king adjacent square what if i can't block adjacent square but can block square before it
+    # i.e: square_under_attack is d2 which cant be blocked but d4 can be and enemy is at d5 so basically i need all square leading up to checking piece
+    saveable_squares = []
+    position_to_save = direction_of_check(king)
+    collected_pieces = collect_all_pieces(king.color)
+    own_pieces = collected_pieces.reject { |piece| piece.class == King }
+    own_pieces.each { |piece| saveable_squares.push(possible_moves_from([piece.row, piece.col])) }
+    checking_direction = position_to_save.flatten
+    saveable_squares.flatten(1).include?(checking_direction)
   end
 
   def direction_of_check(king)
@@ -221,13 +227,15 @@ white_king = board.piece_at(7, 3)
 # puts board.square_under_attack?(6, 2, "black")
 # puts board.square_under_attack?(6, 3, "black")
 # puts board.square_under_attack?(6, 4, "black")
-nb = board.direction_of_check(white_king)
-p nb
-nearby = []
-nb.each do |element|
-  nearby << board.translate_it(element)
-end
-p nearby
+# nb = board.direction_of_check(white_king)
+# p nb
+# nearby = []
+# nb.each do |element|
+#   nearby << board.translate_it(element)
+# end
+# p nearby
+
+board.cant_be_blocked?(white_king)
 # nb.translate_it(nb)
 # just call square under attack around all king's square where ever it return's true thats direction check is coming form
 
