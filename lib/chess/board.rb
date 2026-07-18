@@ -77,7 +77,7 @@ class Board
 
   def square_under_attack?(row, col, enemy_color)
     moves = []
-    enemies = collect_all_enemy_pieces(enemy_color)
+    enemies = collect_all_pieces(enemy_color)
     enemies.each do |enemy|
       if enemy.instance_of?(Pawn)
         moves << pawn_attack_moves(enemy)
@@ -120,7 +120,7 @@ class Board
 
   def find_enemy_king(color)
     king = nil
-    pieces = collect_all_enemy_pieces(color)
+    pieces = collect_all_pieces(color)
     pieces.each { |piece| king = piece if piece.instance_of?(King) }
     king
   end
@@ -128,6 +128,12 @@ class Board
   def check_mate?(king)
     check?(king) && possible_moves_from([king.row, king.col]).empty?
     # and cant be blocked and cant be captured
+  end
+
+  def cant_be_blocked?(direction)
+    # checking_square
+    # collect all of own pieces and generate their moves if moves don't include checking square you are cooked
+    
   end
 
   def direction_of_check(king)
@@ -143,10 +149,10 @@ class Board
 
   private
 
-  def collect_all_enemy_pieces(enemy_color)
+  def collect_all_pieces(color)
     enemies = []
     @board.each do |row|
-      row.each { |piece| enemies.push(piece) if !piece.is_a?(String) && piece.color == enemy_color }
+      row.each { |piece| enemies.push(piece) if !piece.is_a?(String) && piece.color == color }
     end
     enemies
   end
