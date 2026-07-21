@@ -133,6 +133,7 @@ class Board
   def cant_be_blocked?(king)
     # but this method has a bug it only care about king adjacent square what if i can't block adjacent square but can block square before it
     # i.e: square_under_attack is d2 which cant be blocked but d4 can be and enemy is at d5 so basically i need all square leading up to checking piece
+    # and exception if attacker in knight or pawn you are out of luck can't block their attack only way out is capture
     saveable_squares = []
     position_to_save = direction_of_check(king)
     collected_pieces = collect_all_pieces(king.color)
@@ -145,10 +146,27 @@ class Board
   def direction_of_check(king)
     checking_square = []
     nearby_square = king_attack_moves(king)
-    nearby_square.each { |square| checking_square.push(square) if square_under_attack?(square[0], square[1], king.enemy_color) }
+    nearby_square.each do |square|
+      checking_square.push(square) if square_under_attack?(square[0], square[1], king.enemy_color)
+    end
     checking_square
   end
 
+  def find_attacking_piece(checking_square, king)
+    # this only work if rook is attacking at white king from front
+    piece = piece_at(king.row, king.col)
+    row = piece.row
+    col = piece.col
+    path = []
+    loop do
+      path.push([row, col])
+      row -= 1
+      break unless piece_at(row, col).is_a?(String)
+    end
+    path.push([row, col])
+  end
+
+  # pickup adjacent square being attacked at then decrementing row/col of king upto point where current object is not of string class some piece object
   def check?(king)
     square_under_attack?(king.row, king.col, king.enemy_color)
   end
@@ -186,7 +204,7 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
-    @board[3][3] = Queen.new("black", 3, 3, false)
+    @board[3][3] = Rook.new("black", 3, 3, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
@@ -221,6 +239,7 @@ board = Board.new
 board.display_board
 # white_king = board.find_enemy_king("white")
 white_king = board.piece_at(7, 3)
+board.direction_of_check(white_king)
 # puts white_king
 # puts board.check?(white_king)
 # puts board.check_mate?(white_king)
@@ -235,7 +254,7 @@ white_king = board.piece_at(7, 3)
 # end
 # p nearby
 
-board.cant_be_blocked?(white_king)
+# board.cant_be_blocked?(white_king)
 # nb.translate_it(nb)
 # just call square under attack around all king's square where ever it return's true thats direction check is coming form
 
