@@ -132,22 +132,10 @@ class Board
 
   def valid_moves(king)
     saveable_squares = []
-    position_to_save = direction_of_check(king)
     collected_pieces = collect_all_pieces(king.color)
     own_pieces = collected_pieces.reject { |piece| piece.class == King }
     own_pieces.each { |piece| saveable_squares.push(possible_moves_from([piece.row, piece.col])) }
     saveable_squares.flatten(1)
-  end
-
-  # well i can collect all valid moves my pieces can play and each call some method like check on king at each and see if any move return false if yes it can be blocked but its not that simple in my code i cant call check on moves only at king
-
-  def direction_of_check(king)
-    checking_square = []
-    nearby_square = king_attack_moves(king)
-    nearby_square.each do |square|
-      checking_square.push(square) if square_under_attack?(square[0], square[1], king.enemy_color)
-    end
-    checking_square
   end
 
   def can_be_blocked?(board)
@@ -160,24 +148,6 @@ class Board
     end
   end
 
-  # def find_attacking_piece(checking_square, king)
-  #   # this only work if rook is attacking at white king from front
-  #   b = checking_square.flatten(1)
-
-  #   a = [king.row, king.col]
-  #   piece = piece_at(king.row, king.col)
-  #   row = piece.row
-  #   col = piece.col
-  #   path = []
-  #   loop do
-  #     path.push([row, col])
-  #     row -= 1
-  #     break unless piece_at(row, col).is_a?(String)
-  #   end
-  #   # p path.push([row, col])
-  # end
-
-  # pickup adjacent square being attacked at then decrementing row/col of king upto point where current object is not of string class some piece object
   def check?(king)
     square_under_attack?(king.row, king.col, king.enemy_color)
   end
@@ -215,17 +185,13 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
-    @board[3][3] = Rook.new("black", 3, 3, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
         Pawn.new("white", 6, 1, false),
-        # Pawn.new("white", 6, 2, false)
-        EMPTY_SPOT,
-        # Pawn.new("white", 6, 3, false)
-        EMPTY_SPOT,
-        # Pawn.new("white", 6, 4, false)
-        EMPTY_SPOT,
+        Pawn.new("white", 6, 2, false),
+        Pawn.new("white", 6, 3, false),
+        Pawn.new("white", 6, 4, false),
         Pawn.new("white", 6, 5, false),
         Pawn.new("white", 6, 6, false),
         Pawn.new("white", 6, 7, false),
@@ -247,46 +213,4 @@ end
 # now after I fixed this (checkmate) I need to implement ent passant, castling, pawn promotion, serialization and then write tests and the project done.
 
 board = Board.new
-# board.display_board(board.board)
-# white_king = board.find_enemy_king("white")
-# white_king = board.piece_at(7, 3)
-# cs = board.direction_of_check(white_king)
-# board.find_attacking_piece(cs, white_king)
-# board.display_board(board.board)
-p board.can_be_blocked?(board.board)
-# p board.board[4][3] = Knight.new("white", 5, 3)
-# board.display_board(board.board)
-
-# p board.check?(white_king)
-# puts white_king
-# puts board.check?(white_king)
-# puts board.check_mate?(white_king)
-# puts board.square_under_attack?(6, 2, "black")
-# puts board.square_under_attack?(6, 3, "black")
-# puts board.square_under_attack?(6, 4, "black")
-# nb = board.direction_of_check(white_king)
-# p nb
-# nearby = []
-# nb.each do |element|
-#   nearby << board.translate_it(element)
-# end
-# p nearby
-
-# board.cant_be_blocked?(white_king)
-# nb.translate_it(nb)
-# just call square under attack around all king's square where ever it return's true thats direction check is coming form
-
-# king = board.piece_at(7, 3)
-# puts board.check_mate?(king)
-# board.find_enemy_king("white")
-
-# pawn = board.piece_at(6, 3)
-# puts pawn.row
-# puts pawn.col
-# board.move_piece([6, 3], [5, 3])
-# puts board
-# pawna = board.piece_at(5, 3)
-# p pawna.row
-# p pawna.col
-# puts board.check?(king)
-# p board.check_mate?(king)
+board.display_board(board.board)
