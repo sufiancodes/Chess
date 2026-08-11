@@ -30,7 +30,7 @@ class Board
     @board[row]
   end
 
-  def display_board
+  def display_board(board)
     ui.display(board)
   end
 
@@ -130,18 +130,16 @@ class Board
     # and cant be blocked and cant be captured
   end
 
-  def cant_be_blocked?(king)
-    # but this method has a bug it only care about king adjacent square what if i can't block adjacent square but can block square before it
-    # i.e: square_under_attack is d2 which cant be blocked but d4 can be and enemy is at d5 so basically i need all square leading up to checking piece
-    # and exception if attacker in knight or pawn you are out of luck can't block their attack only way out is capture
+  def valid_moves(king)
     saveable_squares = []
     position_to_save = direction_of_check(king)
     collected_pieces = collect_all_pieces(king.color)
     own_pieces = collected_pieces.reject { |piece| piece.class == King }
     own_pieces.each { |piece| saveable_squares.push(possible_moves_from([piece.row, piece.col])) }
-    checking_direction = position_to_save.flatten
-    saveable_squares.flatten(1).include?(checking_direction)
+    saveable_squares.flatten(1)
   end
+
+  # well i can collect all valid moves my pieces can play and each call some method like check on king at each and see if any move return false if yes it can be blocked but its not that simple in my code i cant call check on moves only at king
 
   def direction_of_check(king)
     checking_square = []
@@ -152,19 +150,32 @@ class Board
     checking_square
   end
 
-  def find_attacking_piece(checking_square, king)
-    # this only work if rook is attacking at white king from front
-    piece = piece_at(king.row, king.col)
-    row = piece.row
-    col = piece.col
-    path = []
-    loop do
-      path.push([row, col])
-      row -= 1
-      break unless piece_at(row, col).is_a?(String)
+  def can_be_blocked?(board)
+    dummy_board = Marshal.load(Marshal.dump(self))
+    dummy_king = dummy_board.find_enemy_king("white")
+    collected_move = dummy_board.valid_moves(dummy_king)
+    collected_move.each do |row, col|
+      dummy_board.board[row][col] = Knight.new(dummy_king.enemy_color, row, col)
+      return true if dummy_board.check?(dummy_king) == false
     end
-    path.push([row, col])
   end
+
+  # def find_attacking_piece(checking_square, king)
+  #   # this only work if rook is attacking at white king from front
+  #   b = checking_square.flatten(1)
+
+  #   a = [king.row, king.col]
+  #   piece = piece_at(king.row, king.col)
+  #   row = piece.row
+  #   col = piece.col
+  #   path = []
+  #   loop do
+  #     path.push([row, col])
+  #     row -= 1
+  #     break unless piece_at(row, col).is_a?(String)
+  #   end
+  #   # p path.push([row, col])
+  # end
 
   # pickup adjacent square being attacked at then decrementing row/col of king upto point where current object is not of string class some piece object
   def check?(king)
@@ -236,10 +247,17 @@ end
 # now after I fixed this (checkmate) I need to implement ent passant, castling, pawn promotion, serialization and then write tests and the project done.
 
 board = Board.new
-board.display_board
+# board.display_board(board.board)
 # white_king = board.find_enemy_king("white")
-white_king = board.piece_at(7, 3)
-board.direction_of_check(white_king)
+# white_king = board.piece_at(7, 3)
+# cs = board.direction_of_check(white_king)
+# board.find_attacking_piece(cs, white_king)
+# board.display_board(board.board)
+p board.can_be_blocked?(board.board)
+# p board.board[4][3] = Knight.new("white", 5, 3)
+# board.display_board(board.board)
+
+# p board.check?(white_king)
 # puts white_king
 # puts board.check?(white_king)
 # puts board.check_mate?(white_king)
