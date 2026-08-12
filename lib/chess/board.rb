@@ -126,23 +126,8 @@ class Board
   end
 
   def check_mate?(king)
-    check?(king) && possible_moves_from([king.row, king.col]).empty? && !can_be_blocked?(board)
+    check?(king) && possible_moves_from([king.row, king.col]).empty? && !can_be_blocked?(king)
     # cant be captured
-  end
-
-  def can_be_captured?(king, board)
-    # get enemy row and col
-    # get ur all valid moves
-    # see if your all valid moves has enemy row and col if yes can be capture
-  end
-
-  def direction_of_check(king)
-    checking_square = []
-    nearby_square = king_attack_moves(king)
-    nearby_square.each do |square|
-      checking_square.push(square) if square_under_attack?(square[0], square[1], king.enemy_color)
-    end
-    checking_square
   end
 
   def valid_moves(king)
@@ -153,13 +138,16 @@ class Board
     saveable_squares.flatten(1)
   end
 
-  def can_be_blocked?(board)
+  def can_be_blocked?(king)
     dummy_board = Marshal.load(Marshal.dump(self))
-    dummy_king = dummy_board.find_enemy_king("white")
+    dummy_king = dummy_board.find_king(king.color)
     collected_move = dummy_board.valid_moves(dummy_king)
     collected_move.each do |row, col|
-      dummy_board.board[row][col] = Knight.new(dummy_king.enemy_color, row, col)
+      original_state = dummy_board.board[row][col]
+      dummy_board.board[row][col] = Knight.new(dummy_king.color, row, col)
       return true if dummy_board.check?(dummy_king) == false
+
+      dummy_board.board[row][col] = original_state
     end
   end
 
@@ -232,4 +220,4 @@ end
 board = Board.new
 board.display_board(board.board)
 white_king = board.piece_at(7, 3)
-p board.can_be_captured?(white_king, board)
+p board.can_be_blocked?(white_king)
