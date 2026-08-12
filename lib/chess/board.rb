@@ -126,8 +126,7 @@ class Board
   end
 
   def check_mate?(king)
-    check?(king) && possible_moves_from([king.row, king.col]).empty? && !can_be_blocked?(king)
-    # cant be captured
+    check?(king) && possible_moves_from([king.row, king.col]).empty? && !can_escape?(king)
   end
 
   def valid_moves(king)
@@ -138,7 +137,7 @@ class Board
     saveable_squares.flatten(1)
   end
 
-  def can_be_blocked?(king)
+  def can_escape?(king)
     dummy_board = Marshal.load(Marshal.dump(self))
     dummy_king = dummy_board.find_king(king.color)
     collected_move = dummy_board.valid_moves(dummy_king)
@@ -149,6 +148,7 @@ class Board
 
       dummy_board.board[row][col] = original_state
     end
+    false
   end
 
   def check?(king)
@@ -188,14 +188,12 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
-    @board[3][3] = Rook.new("black", 3, 3, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
         Pawn.new("white", 6, 1, false),
         Pawn.new("white", 6, 2, false),
-        # Pawn.new("white", 6, 3, false)
-        EMPTY_SPOT,
+        Pawn.new("white", 6, 3, false),
         Pawn.new("white", 6, 4, false),
         Pawn.new("white", 6, 5, false),
         Pawn.new("white", 6, 6, false),
@@ -220,4 +218,4 @@ end
 board = Board.new
 board.display_board(board.board)
 white_king = board.piece_at(7, 3)
-p board.can_be_blocked?(white_king)
+board.can_be_blocked?(white_king)
