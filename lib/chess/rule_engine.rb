@@ -30,5 +30,33 @@ class RuleEngine
     enemy_moves = moves.flatten(1)
     enemy_moves.include?([row, col])
   end
-  
+
+  def pawn_attack_moves(enemy)
+    # rule_engine
+    moves = []
+    direction = enemy.color == "white" ? -1 : +1
+    [-1, + 1].each do |delta|
+      column = enemy.col + delta
+      moves.push([enemy.row + direction, column]) if column.between?(0, 7) && (enemy.row + direction).between?(0, 7)
+    end
+    moves
+  end
+
+  def king_attack_moves(king)
+    # rule_engine
+    attacked_squares = []
+
+    (-1..1).each do |row_offset|
+      (-1..1).each do |col_offset|
+        next if row_offset.zero? && col_offset.zero?
+
+        target_row = king.row + row_offset
+        target_col = king.col + col_offset
+
+        attacked_squares << [target_row, target_col] if target_row.between?(0, 7) && target_col.between?(0, 7)
+      end
+    end
+
+    attacked_squares
+  end
 end
