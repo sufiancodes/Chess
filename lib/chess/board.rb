@@ -118,7 +118,7 @@ class Board
     attacked_squares
   end
 
-  def find_enemy_king(color)
+  def find_king(color)
     king = nil
     pieces = collect_all_pieces(color)
     pieces.each { |piece| king = piece if piece.instance_of?(King) }
@@ -126,8 +126,23 @@ class Board
   end
 
   def check_mate?(king)
-    check?(king) && possible_moves_from([king.row, king.col]).empty?
-    # and cant be blocked and cant be captured
+    check?(king) && possible_moves_from([king.row, king.col]).empty? && !can_be_blocked?(board)
+    # cant be captured
+  end
+
+  def can_be_captured?(king, board)
+    # get enemy row and col
+    # get ur all valid moves
+    # see if your all valid moves has enemy row and col if yes can be capture
+  end
+
+  def direction_of_check(king)
+    checking_square = []
+    nearby_square = king_attack_moves(king)
+    nearby_square.each do |square|
+      checking_square.push(square) if square_under_attack?(square[0], square[1], king.enemy_color)
+    end
+    checking_square
   end
 
   def valid_moves(king)
@@ -185,12 +200,14 @@ class Board
         Pawn.new("black", 1, 6, false),
         Pawn.new("black", 1, 7, false),
       ]
+    @board[3][3] = Rook.new("black", 3, 3, false)
     @board[6] =
       [
         Pawn.new("white", 6, 0, false),
         Pawn.new("white", 6, 1, false),
         Pawn.new("white", 6, 2, false),
-        Pawn.new("white", 6, 3, false),
+        # Pawn.new("white", 6, 3, false)
+        EMPTY_SPOT,
         Pawn.new("white", 6, 4, false),
         Pawn.new("white", 6, 5, false),
         Pawn.new("white", 6, 6, false),
@@ -214,3 +231,5 @@ end
 
 board = Board.new
 board.display_board(board.board)
+white_king = board.piece_at(7, 3)
+p board.can_be_captured?(white_king, board)
