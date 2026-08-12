@@ -3,13 +3,8 @@
 # this class deals with rule of game
 
 require_relative "move_calculator"
-require_relative "board"
 class RuleEngine
   include MoveCalculator
-
-  def initialize
-    @board = Board.new
-  end
 
   def possible_moves_from(array)
     MoveCalculator.legal_moves(array[0], array[1], @board)
@@ -17,7 +12,7 @@ class RuleEngine
 
   def square_under_attack?(row, col, enemy_color)
     moves = []
-    enemies = collect_all_pieces(enemy_color)
+    enemies = @board.collect_all_pieces(enemy_color)
     enemies.each do |enemy|
       if enemy.instance_of?(Pawn)
         moves << pawn_attack_moves(enemy)
@@ -32,7 +27,6 @@ class RuleEngine
   end
 
   def pawn_attack_moves(enemy)
-    # rule_engine
     moves = []
     direction = enemy.color == "white" ? -1 : +1
     [-1, + 1].each do |delta|
@@ -43,7 +37,6 @@ class RuleEngine
   end
 
   def king_attack_moves(king)
-    # rule_engine
     attacked_squares = []
 
     (-1..1).each do |row_offset|
@@ -61,17 +54,14 @@ class RuleEngine
   end
 
   def check?(king)
-    # rule_engine
     square_under_attack?(king.row, king.col, king.enemy_color)
   end
 
   def check_mate?(king)
-    # rule_engine
     check?(king) && @rule_engine.possible_moves_from([king.row, king.col]).empty? && !can_escape?(king)
   end
 
   def valid_moves(king)
-    # rule_engine
     saveable_squares = []
     collected_pieces = collect_all_pieces(king.color)
     own_pieces = collected_pieces.reject { |piece| piece.class == King }
@@ -80,7 +70,6 @@ class RuleEngine
   end
 
   def can_escape?(king)
-    # rule_engine
     dummy_board = Marshal.load(Marshal.dump(self))
     dummy_king = dummy_board.find_king(king.color)
     collected_move = dummy_board.valid_moves(dummy_king)
