@@ -59,4 +59,14 @@ class RuleEngine
 
     attacked_squares
   end
+
+  def check?(king)
+    # rule_engine
+    square_under_attack?(king.row, king.col, king.enemy_color)
+  end
+
+  def check_mate?(king)
+    # rule_engine
+    check?(king) && @rule_engine.possible_moves_from([king.row, king.col]).empty? && !can_escape?(king)
+  end
 end
