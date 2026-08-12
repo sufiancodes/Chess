@@ -69,4 +69,28 @@ class RuleEngine
     # rule_engine
     check?(king) && @rule_engine.possible_moves_from([king.row, king.col]).empty? && !can_escape?(king)
   end
+
+  def valid_moves(king)
+    # rule_engine
+    saveable_squares = []
+    collected_pieces = collect_all_pieces(king.color)
+    own_pieces = collected_pieces.reject { |piece| piece.class == King }
+    own_pieces.each { |piece| saveable_squares.push(@rule_engine.possible_moves_from([piece.row, piece.col])) }
+    saveable_squares.flatten(1)
+  end
+
+  def can_escape?(king)
+    # rule_engine
+    dummy_board = Marshal.load(Marshal.dump(self))
+    dummy_king = dummy_board.find_king(king.color)
+    collected_move = dummy_board.valid_moves(dummy_king)
+    collected_move.each do |row, col|
+      original_state = dummy_board.board[row][col]
+      dummy_board.board[row][col] = Knight.new(dummy_king.color, row, col)
+      return true if dummy_board.check?(dummy_king) == false
+
+      dummy_board.board[row][col] = original_state
+    end
+    false
+  end
 end
