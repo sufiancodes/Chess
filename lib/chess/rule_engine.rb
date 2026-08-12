@@ -6,20 +6,20 @@ require_relative "move_calculator"
 class RuleEngine
   include MoveCalculator
 
-  def possible_moves_from(array)
-    MoveCalculator.legal_moves(array[0], array[1], @board)
+  def possible_moves_from(array, board)
+    MoveCalculator.legal_moves(array[0], array[1], board)
   end
 
-  def square_under_attack?(row, col, enemy_color)
+  def square_under_attack?(row, col, enemy_color, board)
     moves = []
-    enemies = @board.collect_all_pieces(enemy_color)
+    enemies = board.collect_all_pieces(enemy_color)
     enemies.each do |enemy|
       if enemy.instance_of?(Pawn)
         moves << pawn_attack_moves(enemy)
       elsif enemy.instance_of?(King)
         moves << king_attack_moves(enemy)
       else
-        moves.push(possible_moves_from([enemy.row, enemy.col]))
+        moves.push(possible_moves_from([enemy.row, enemy.col], board))
       end
     end
     enemy_moves = moves.flatten(1)
@@ -53,30 +53,30 @@ class RuleEngine
     attacked_squares
   end
 
-  def check?(king)
-    square_under_attack?(king.row, king.col, king.enemy_color)
+  def check?(king, board)
+    square_under_attack?(king.row, king.col, king.enemy_color, board)
   end
 
-  def check_mate?(king)
-    check?(king) && @rule_engine.possible_moves_from([king.row, king.col]).empty? && !can_escape?(king)
+  def check_mate?(king, board)
+    check?(king, board) && possible_moves_from([king.row, king.col], board).empty? && !can_escape?(king, board)
   end
 
-  def valid_moves(king)
+  def valid_moves(king, board)
     saveable_squares = []
-    collected_pieces = collect_all_pieces(king.color)
+    collected_pieces = board.collect_all_pieces(king.color)
     own_pieces = collected_pieces.reject { |piece| piece.class == King }
-    own_pieces.each { |piece| saveable_squares.push(@rule_engine.possible_moves_from([piece.row, piece.col])) }
+    own_pieces.each { |piece| saveable_squares.push(possible_moves_from([piece.row, piece.col], board)) }
     saveable_squares.flatten(1)
   end
 
-  def can_escape?(king)
-    dummy_board = Marshal.load(Marshal.dump(self))
+  def can_escape?(king, board)
+    dummy_board = Marshal.load(Marshal.dump(board))
     dummy_king = dummy_board.find_king(king.color)
-    collected_move = dummy_board.valid_moves(dummy_king)
+    collected_move = valid_moves(dummy_king, dummy_board)
     collected_move.each do |row, col|
       original_state = dummy_board.board[row][col]
       dummy_board.board[row][col] = Knight.new(dummy_king.color, row, col)
-      return true if dummy_board.check?(dummy_king) == false
+      return true if check?(dummy_king, dummy_board) == false
 
       dummy_board.board[row][col] = original_state
     end
