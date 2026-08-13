@@ -69,6 +69,8 @@ class Board
   def move_piece(from, to)
     piece = @board[from[0]][from[1]]
     piece.has_moved = true if piece.instance_of?(Pawn)
+    piece.has_moved = true if piece.instance_of?(King)
+    piece.has_moved = true if piece.instance_of?(Rook)
     piece.row = to[0]
     piece.col = to[1]
     @board[to[0]][to[1]] = piece
