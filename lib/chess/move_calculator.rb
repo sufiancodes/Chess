@@ -23,23 +23,72 @@ module MoveCalculator
       end
     end
 
-    private
-
     def calculate_king_moves(row, col, color, piece, board)
       moves = []
       # # king can move when the square is empty not under attack and not a friendly piece
       # # vertical_squares
-      moves << [row + 1, col] if (row + 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col) && !board.square_under_attack?(row + 1, col, piece.enemy_color)
-      moves << [row - 1, col] if (row - 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col) && !board.square_under_attack?(row - 1, col, piece.enemy_color)
+      moves << [row + 1, col] if (row + 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col) && !square_under_attack?(row + 1, col, piece.enemy_color, board)
+      moves << [row - 1, col] if (row - 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col) && !square_under_attack?(row - 1, col, piece.enemy_color, board)
       # # horizontal_square
-      moves << [row, col + 1] if (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row, col + 1) && !board.square_under_attack?(row, col + 1, piece.enemy_color)
-      moves << [row, col - 1] if (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row, col - 1) && !board.square_under_attack?(row, col - 1, piece.enemy_color)
+      moves << [row, col + 1] if (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row, col + 1) && !square_under_attack?(row, col + 1, piece.enemy_color, board)
+      moves << [row, col - 1] if (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row, col - 1) && !square_under_attack?(row, col - 1, piece.enemy_color, board)
       # # diagonal_square
-      moves << [row + 1, col + 1] if (row + 1).between?(0, 7) && (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col + 1) && !board.square_under_attack?(row + 1, col + 1, piece.enemy_color)
-      moves << [row + 1, col - 1] if (row + 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col - 1) && !board.square_under_attack?(row + 1, col - 1, piece.enemy_color)
-      moves << [row - 1, col + 1] if (row - 1).between?(0, 7) && (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col + 1) && !board.square_under_attack?(row - 1, col + 1, piece.enemy_color)
-      moves << [row - 1, col - 1] if (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col - 1) && !board.square_under_attack?(row - 1, col - 1, piece.enemy_color)
+      moves << [row + 1, col + 1] if (row + 1).between?(0, 7) && (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col + 1) && !square_under_attack?(row + 1, col + 1, piece.enemy_color, board)
+      moves << [row + 1, col - 1] if (row + 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col - 1) && !square_under_attack?(row + 1, col - 1, piece.enemy_color, board)
+      moves << [row - 1, col + 1] if (row - 1).between?(0, 7) && (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col + 1) && !square_under_attack?(row - 1, col + 1, piece.enemy_color, board)
+      moves << [row - 1, col - 1] if (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col - 1) && !square_under_attack?(row - 1, col - 1, piece.enemy_color, board)
+      # castling queen_side
+      # for king and rook
+      # moves << [[row, col - 2], [row, col + 3]]
+
       moves
+    end
+
+    def possible_moves_from(array, board)
+      MoveCalculator.legal_moves(array[0], array[1], board)
+    end
+
+    def square_under_attack?(row, col, enemy_color, board)
+      moves = []
+      enemies = board.collect_all_pieces(enemy_color)
+      enemies.each do |enemy|
+        if enemy.instance_of?(Pawn)
+          moves << pawn_attack_moves(enemy)
+        elsif enemy.instance_of?(King)
+          moves << king_attack_moves(enemy)
+        else
+          moves.push(possible_moves_from([enemy.row, enemy.col], board))
+        end
+      end
+      enemy_moves = moves.flatten(1)
+      enemy_moves.include?([row, col])
+    end
+
+    def pawn_attack_moves(enemy)
+      moves = []
+      direction = enemy.color == "white" ? -1 : +1
+      [-1, + 1].each do |delta|
+        column = enemy.col + delta
+        moves.push([enemy.row + direction, column]) if column.between?(0, 7) && (enemy.row + direction).between?(0, 7)
+      end
+      moves
+    end
+
+    def king_attack_moves(king)
+      attacked_squares = []
+
+      (-1..1).each do |row_offset|
+        (-1..1).each do |col_offset|
+          next if row_offset.zero? && col_offset.zero?
+
+          target_row = king.row + row_offset
+          target_col = king.col + col_offset
+
+          attacked_squares << [target_row, target_col] if target_row.between?(0, 7) && target_col.between?(0, 7)
+        end
+      end
+
+      attacked_squares
     end
 
     def calculate_queen_moves(row, col, color, piece, board)
@@ -181,7 +230,9 @@ module MoveCalculator
 
     def filter_illegal_position(array)
       array.reject do |inner_array|
-        inner_array.any? { |element| element.negative? || element > 7 }
+        inner_array.any? do |element|
+          element.negative? || element > 7
+        end
       end
     end
 
@@ -214,7 +265,7 @@ module MoveCalculator
         moves << [one_forward_row, col - 1] if diag_right != empty && diag_right.color == "white"
       end
 
-      if col + 1 <= 7 # adjust if your board size differs
+      if col + 1 <= 7
         diag_left = board.piece_at(one_forward_row, col + 1)
         moves << [one_forward_row, col + 1] if diag_left != empty && diag_left.color == "white"
       end
@@ -252,7 +303,7 @@ module MoveCalculator
         moves << [one_forward_row, col - 1] if diag_right != empty && diag_right.color == "black"
       end
 
-      if col + 1 <= 7 # adjust if your board size differs
+      if col + 1 <= 7
         diag_right = board.piece_at(one_forward_row, col + 1)
         moves << [one_forward_row, col + 1] if diag_right != empty && diag_right.color == "black"
       end
