@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "board"
-# this class deals with UI player input etc
+# this class deals with UI and display
 class UI
   def display(board)
     col_alphabets = "\n  a b c d e f g h"
@@ -28,4 +27,13 @@ class UI
     row = pos[1]
     result = [row_numbers[row], col_alphabets[column]]
   end
+
+  def two_d_array?(array)
+    array.any? { it.is_a?(Array) }
+  end
 end
+ui = UI.new
+# [[7, 3], [[7, 2], [7, 7]]]
+p ui.translate_computer_input([7, 3])
+
+p two_d_array?([[1, 2][1, 2]])
