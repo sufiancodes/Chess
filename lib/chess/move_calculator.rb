@@ -23,6 +23,10 @@ module MoveCalculator
       end
     end
 
+    def possible_moves_from(array, board)
+      legal_moves(array[0], array[1], board)
+    end
+
     def calculate_king_moves(row, col, color, piece, board)
       moves = []
       # # king can move when the square is empty not under attack and not a friendly piece
@@ -39,13 +43,22 @@ module MoveCalculator
       moves << [row - 1, col - 1] if (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col - 1) && !square_under_attack?(row - 1, col - 1, piece.enemy_color, board)
       # castling queen_side
       # for king and rook
-      # moves << [[row, col - 2], [row, col + 3]]
+      moves << [[row, col - 2], [row, col + 3]]
+      p(moves)
 
       moves
     end
 
-    def possible_moves_from(array, board)
-      MoveCalculator.legal_moves(array[0], array[1], board)
+    def queen_side_castle_possible?(king, board)
+      rook = board.piece_at(king.row, king.col - 4)
+      return false if board.piece_at(king.row, king.col - 4).class != Rook
+      return false if king.has_moved == true || rook.has_moved == true
+      return false if check?(king, board)
+      return false if MoveCalculator.square_under_attack?(king.row, king.col - 1, king.enemy_color, board) || board.piece_at(king.row, king.col - 1) != Board::EMPTY_SPOT
+      return false if MoveCalculator.square_under_attack?(king.row, king.col - 2, king.enemy_color, board) || board.piece_at(king.row, king.col - 2) != Board::EMPTY_SPOT
+      return false if MoveCalculator.square_under_attack?(king.row, king.col - 3, king.enemy_color, board) || board.piece_at(king.row, king.col - 3) != Board::EMPTY_SPOT
+
+      true
     end
 
     def square_under_attack?(row, col, enemy_color, board)
