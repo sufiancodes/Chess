@@ -15,6 +15,10 @@ class UI
   end
 
   def translate_computer_input(array)
+    if array.last.is_a?(String)
+      return array.last
+    end
+
     col_map = ["a", "b", "c", "d", "e", "f", "g", "h"]
     row_map = ["8", "7", "6", "5", "4", "3", "2", "1"]
     row_index, col_index = array
@@ -32,8 +36,6 @@ class UI
     array.any? { it.is_a?(Array) }
   end
 end
-ui = UI.new
+# ui = UI.new
 # [[7, 3], [[7, 2], [7, 7]]]
-p ui.translate_computer_input([7, 3])
-
-p two_d_array?([[1, 2][1, 2]])
+# p ui.translate_computer_input([[7, 2], [7, 7]])
