@@ -6,66 +6,19 @@ require_relative "move_calculator"
 class RuleEngine
   include MoveCalculator
 
-  def possible_moves_from(array, board)
-    MoveCalculator.legal_moves(array[0], array[1], board)
-  end
-
-  def square_under_attack?(row, col, enemy_color, board)
-    moves = []
-    enemies = board.collect_all_pieces(enemy_color)
-    enemies.each do |enemy|
-      if enemy.instance_of?(Pawn)
-        moves << pawn_attack_moves(enemy)
-      elsif enemy.instance_of?(King)
-        moves << king_attack_moves(enemy)
-      else
-        moves.push(possible_moves_from([enemy.row, enemy.col], board))
-      end
-    end
-    enemy_moves = moves.flatten(1)
-    enemy_moves.include?([row, col])
-  end
-
-  def pawn_attack_moves(enemy)
-    moves = []
-    direction = enemy.color == "white" ? -1 : +1
-    [-1, + 1].each do |delta|
-      column = enemy.col + delta
-      moves.push([enemy.row + direction, column]) if column.between?(0, 7) && (enemy.row + direction).between?(0, 7)
-    end
-    moves
-  end
-
-  def king_attack_moves(king)
-    attacked_squares = []
-
-    (-1..1).each do |row_offset|
-      (-1..1).each do |col_offset|
-        next if row_offset.zero? && col_offset.zero?
-
-        target_row = king.row + row_offset
-        target_col = king.col + col_offset
-
-        attacked_squares << [target_row, target_col] if target_row.between?(0, 7) && target_col.between?(0, 7)
-      end
-    end
-
-    attacked_squares
-  end
-
   def check?(king, board)
-    square_under_attack?(king.row, king.col, king.enemy_color, board)
+    MoveCalculator.square_under_attack?(king.row, king.col, king.enemy_color, board)
   end
 
   def check_mate?(king, board)
-    check?(king, board) && possible_moves_from([king.row, king.col], board).empty? && !can_escape?(king, board)
+    check?(king, board) && MoveCalculator.possible_moves_from([king.row, king.col], board).empty? && !can_escape?(king, board)
   end
 
   def valid_moves(king, board)
     saveable_squares = []
     collected_pieces = board.collect_all_pieces(king.color)
     own_pieces = collected_pieces.reject { |piece| piece.class == King }
-    own_pieces.each { |piece| saveable_squares.push(possible_moves_from([piece.row, piece.col], board)) }
+    own_pieces.each { |piece| saveable_squares.push(MoveCalculator.possible_moves_from([piece.row, piece.col], board)) }
     saveable_squares.flatten(1)
   end
 
@@ -83,25 +36,14 @@ class RuleEngine
     false
   end
 
-  def king_side_castle_possible?(king, board)
-    rook = board.piece_at(king.row, king.col + 3)
-    return false if board.piece_at(king.row, king.col + 3).class != Rook
-    return false if king.has_moved == true || rook.has_moved == true
-    return false if check?(king, board)
-    return false if square_under_attack?(king.row, king.col + 1, king.enemy_color, board) || board.piece_at(king.row, king.col + 1) != Board::EMPTY_SPOT
-    return false if square_under_attack?(king.row, king.col + 2, king.enemy_color, board) || board.piece_at(king.row, king.col + 2) != Board::EMPTY_SPOT
-
-    true
-  end
-
   def queen_side_castle_possible?(king, board)
     rook = board.piece_at(king.row, king.col - 4)
     return false if board.piece_at(king.row, king.col - 4).class != Rook
     return false if king.has_moved == true || rook.has_moved == true
     return false if check?(king, board)
-    return false if square_under_attack?(king.row, king.col - 1, king.enemy_color, board) || board.piece_at(king.row, king.col - 1) != Board::EMPTY_SPOT
-    return false if square_under_attack?(king.row, king.col - 2, king.enemy_color, board) || board.piece_at(king.row, king.col - 2) != Board::EMPTY_SPOT
-    return false if square_under_attack?(king.row, king.col - 3, king.enemy_color, board) || board.piece_at(king.row, king.col - 3) != Board::EMPTY_SPOT
+    return false if MoveCalculator.square_under_attack?(king.row, king.col - 1, king.enemy_color, board) || board.piece_at(king.row, king.col - 1) != Board::EMPTY_SPOT
+    return false if MoveCalculator.square_under_attack?(king.row, king.col - 2, king.enemy_color, board) || board.piece_at(king.row, king.col - 2) != Board::EMPTY_SPOT
+    return false if MoveCalculator.square_under_attack?(king.row, king.col - 3, king.enemy_color, board) || board.piece_at(king.row, king.col - 3) != Board::EMPTY_SPOT
 
     true
   end
