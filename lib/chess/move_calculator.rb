@@ -67,6 +67,17 @@ module MoveCalculator
       true
     end
 
+    def king_side_castle_possible?(king, board)
+      rook = board.piece_at(king.row, king.col + 3)
+      return false if board.piece_at(king.row, king.col + 3).class != Rook
+      return false if king.has_moved == true || rook.has_moved == true
+      return false if check?(king, board)
+      return false if square_under_attack?(king.row, king.col + 1, king.enemy_color, board) || board.piece_at(king.row, king.col + 1) != Board::EMPTY_SPOT
+      return false if square_under_attack?(king.row, king.col + 2, king.enemy_color, board) || board.piece_at(king.row, king.col + 2) != Board::EMPTY_SPOT
+
+      true
+    end
+
     def square_under_attack?(row, col, enemy_color, board)
       moves = []
       enemies = board.collect_all_pieces(enemy_color)
