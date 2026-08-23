@@ -32,10 +32,18 @@ class UI
     result = [row_numbers[row], col_alphabets[column]]
   end
 
-  def two_d_array?(array)
-    array.any? { it.is_a?(Array) }
+  def translate_castling_input(position)
+    # first cut these c1d1 string in half
+    destination = []
+    moves = position.chars.each_slice(position.length / 2).map(&:join)
+    moves.each { |move| destination << translate_user_input(move) }
+    destination
   end
 end
+
 # ui = UI.new
+# ui.translate_castling_input("c1d1")
+# string = "c1d1"
+# ui.translate_castling_input(string)
 # [[7, 3], [[7, 2], [7, 7]]]
 # p ui.translate_computer_input([[7, 2], [7, 7]])
