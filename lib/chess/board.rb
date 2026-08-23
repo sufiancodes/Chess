@@ -67,8 +67,10 @@ class Board
     true if piece.color == own_color
   end
 
-  def move_two_pieces(king_from, king_to, rook_from, rook_to)
+  def move_two_pieces(king_from, king_to, rook_to)
+    rook_from = find_rook(king_from, king_to)
     move_piece(king_from, king_to)
+    move_piece(rook_from, rook_to)
   end
 
   def move_piece(from, to)
@@ -80,6 +82,16 @@ class Board
     piece.col = to[1]
     @board[to[0]][to[1]] = piece
     @board[from[0]][from[1]] = EMPTY_SPOT
+  end
+
+  def find_rook(king_from, king_to)
+    rook = []
+    king = piece_at(king_from[0], king_from[1])
+    rook << 7 if king.color == "white"
+    rook << 0 if king.color == "black"
+    rook << 0 if king_to[1] == 2
+    rook << 7 if king_to[1] == 6
+    rook
   end
 
   def find_king(color)
@@ -134,20 +146,20 @@ class Board
     @board[7] =
       [
         Rook.new("white", 7, 0, false),
-        # Knight.new("white", 7, 1)
-        EMPTY_SPOT,
-        # Bishop.new("white", 7, 2, false)
-        EMPTY_SPOT,
-        # Queen.new("white", 7, 3, false)
-        EMPTY_SPOT,
+        Knight.new("white", 7, 1),
+        Bishop.new("white", 7, 2, false),
+        Queen.new("white", 7, 3, false),
         King.new("white", 7, 4, false),
-        Bishop.new("white", 7, 5, false),
-        Knight.new("white", 7, 6),
+        # Bishop.new("white", 7, 5, false)
+        EMPTY_SPOT,
+        # Knight.new("white", 7, 6)
+        EMPTY_SPOT,
         Rook.new("white", 7, 7, false),
       ]
   end
 end
 board = Board.new
+p board.find_rook([0, 4], [0, 6])
 # board.display_board(board.board)
 # white_king = board.piece_at(7, 4)
 # p board.rule_engine.queen_side_castle_possible?(white_king, board)
