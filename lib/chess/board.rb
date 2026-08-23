@@ -67,25 +67,15 @@ class Board
     true if piece.color == own_color
   end
 
-  # For castling I probably need a new method like move pieces which moves two pieces at once
   def move_two_pieces(king_from, king_to, rook_from, rook_to)
-    king = @board[king_from[0]][king_from[1]]
-    rook = @board[rook_from[0]][rook_from[1]]
-    king.has_moved = true if king.instance_of?(King)
-    rook.has_moved = true if rook.instance_of?(Rook)
-    king.row = king_to[0]
-    king.col = king_to[1]
-    rook.row = rook_to[0]
-    rook.col = rook_to[1]
-    @board[king_to[0]][king_to[1]] = king
-    @board[king_from[0]][king_from[1]] = EMPTY_SPOT
-    @board[rook_to[0]][rook_to[1]] = rook
-    @board[rook_from[0]][rook_from[1]] = EMPTY_SPOT
+    move_piece(king_from, king_to)
   end
 
   def move_piece(from, to)
     piece = @board[from[0]][from[1]]
     piece.has_moved = true if piece.instance_of?(Pawn)
+    piece.has_moved = true if piece.instance_of?(Rook)
+    piece.has_moved = true if piece.instance_of?(King)
     piece.row = to[0]
     piece.col = to[1]
     @board[to[0]][to[1]] = piece
@@ -158,12 +148,13 @@ class Board
   end
 end
 board = Board.new
-board.display_board(board.board)
+# board.display_board(board.board)
 # white_king = board.piece_at(7, 4)
 # p board.rule_engine.queen_side_castle_possible?(white_king, board)
 # board.display_board(board.board)
 # board.board[7][4]
 # board.board[7][0]
-board.move_two_pieces([7, 4], [7, 2], [7, 0], [7, 3])
-board.display_board(board.board)
+# board.move_two_pieces([7, 4], [7, 2], [7, 0], [7, 3])
+# board.display_board(board.board)
 # now after I fixed this (checkmate) I need to implement ent passant, castling, pawn promotion, serialization and then write tests and the project done.
+# [[7, 3], [[7, 2], [7, 7]]]
