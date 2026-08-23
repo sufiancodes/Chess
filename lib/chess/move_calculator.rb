@@ -45,8 +45,8 @@ module MoveCalculator
       # for king and rook
       # [row, col + 3]
       # c1d1
-      moves << [row, col - 2] if queen_side_castle_possible?(piece, board)
-      p(moves)
+      moves << [row, col - 2, "c1d1"] if queen_side_castle_possible?(piece, board)
+      moves << [row, col + 2, "g1f1"] if king_side_castle_possible?(piece, board)
 
       moves
     end

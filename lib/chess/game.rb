@@ -3,6 +3,8 @@
 require_relative "board"
 require_relative "player"
 require_relative "ui"
+require_relative "rule_engine"
+require_relative "move_calculator"
 # This class will have logic related to game
 class Game
   attr_accessor :player
@@ -12,15 +14,18 @@ class Game
     @player = Player.new
     @ui = UI.new
     @current_name = nil
+    @rule_engine = RuleEngine.new
   end
 
   def play
     @player.welcome
     @ui.display(@board.board)
     loop do
+      # prompting user to select the piece and processing user input
       puts "#{player.current_player}: Please chose the piece you wish to move"
       input = gets.chomp
       source = @ui.translate_user_input(input)
+      selected_piece = @board.piece_at(source[0], source[1])
 
       # listing moves
       possible_moves = list_moves(source)
@@ -32,26 +37,33 @@ class Game
         puts " "
       end
 
-      take_move = gets.chomp
-      destination = @ui.translate_user_input(take_move)
-      @board.move_piece(source, destination)
+      # Taking user selected move and moving piece on board
+      selected_move = gets.chomp
+      destination = @ui.translate_user_input(selected_move)
+
+      if selected_move.length == 4
+        castling_positions = @ui.translate_castling_input(selected_move)
+        @board.move_two_pieces([selected_piece.row, selected_piece.col], castling_positions[0], castling_positions[1])
+      else
+        @board.move_piece(source, destination)
+      end
 
       # finding enemy king
       piece = @board.piece_at(destination[0], destination[1])
-      enemy_king = @board.find_enemy_king(piece.enemy_color)
+      enemy_king = @board.find_king(piece.enemy_color)
 
       # showing board and switching player
       @ui.display(@board.board)
 
       # stop game if its checkmate
-      break if @board.check_mate?(enemy_king)
+      break if @rule_engine.check_mate?(enemy_king, @board)
 
       player.switch_player!
     end
   end
 
   def list_moves(source)
-    moves = @board.possible_moves_from(source)
+    moves = MoveCalculator.possible_moves_from(source, @board)
     if moves.empty?
       nil
     else
