@@ -14,11 +14,14 @@ class UI
     create_useable_array(position, col, row)
   end
 
-  def translate_computer_input(array)
-    if array.last.is_a?(String)
-      return array.last
-    end
+  def translate_castling_computer_input(array)
+    first_half, second_half = array.each_slice(2).to_a
+    first_square = translate_computer_input(first_half)
+    second_square = translate_computer_input(second_half)
+    first_square + second_square
+  end
 
+  def translate_computer_input(array)
     col_map = ["a", "b", "c", "d", "e", "f", "g", "h"]
     row_map = ["8", "7", "6", "5", "4", "3", "2", "1"]
     row_index, col_index = array
@@ -41,9 +44,9 @@ class UI
   end
 end
 
-# ui = UI.new
-# ui.translate_castling_input("c1d1")
-# string = "c1d1"
-# ui.translate_castling_input(string)
-# [[7, 3], [[7, 2], [7, 7]]]
-# p ui.translate_computer_input([[7, 2], [7, 7]])
+ui = UI.new
+ui.translate_castling_input_for_computer([7, 6, 7, 5])
+# king = [7, 4]->[7, 6]
+# Rook = [7, 7]->[7, 5]
+# ui.translate_computer_input
+# here what I going do is that i will break this array of 4 form move calculator into 2 and then process them one by one then join them simple problem solved
