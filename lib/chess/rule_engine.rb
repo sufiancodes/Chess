@@ -6,12 +6,8 @@ require_relative "move_calculator"
 class RuleEngine
   include MoveCalculator
 
-  def check?(king, board)
-    MoveCalculator.square_under_attack?(king.row, king.col, king.enemy_color, board)
-  end
-
   def check_mate?(king, board)
-    check?(king, board) && MoveCalculator.possible_moves_from([king.row, king.col], board).empty? && !can_escape?(king, board)
+    MoveCalculator.check?(king, board) && MoveCalculator.possible_moves_from([king.row, king.col], board).empty? && !can_escape?(king, board)
   end
 
   def valid_moves(king, board)
@@ -29,22 +25,16 @@ class RuleEngine
     collected_move.each do |row, col|
       original_state = dummy_board.board[row][col]
       dummy_board.board[row][col] = Knight.new(dummy_king.color, row, col)
-      return true if check?(dummy_king, dummy_board) == false
+      return true if MoveCalculator.check?(dummy_king, dummy_board) == false
 
       dummy_board.board[row][col] = original_state
     end
     false
   end
 
-  def queen_side_castle_possible?(king, board)
-    rook = board.piece_at(king.row, king.col - 4)
-    return false if board.piece_at(king.row, king.col - 4).class != Rook
-    return false if king.has_moved == true || rook.has_moved == true
-    return false if check?(king, board)
-    return false if MoveCalculator.square_under_attack?(king.row, king.col - 1, king.enemy_color, board) || board.piece_at(king.row, king.col - 1) != Board::EMPTY_SPOT
-    return false if MoveCalculator.square_under_attack?(king.row, king.col - 2, king.enemy_color, board) || board.piece_at(king.row, king.col - 2) != Board::EMPTY_SPOT
-    return false if MoveCalculator.square_under_attack?(king.row, king.col - 3, king.enemy_color, board) || board.piece_at(king.row, king.col - 3) != Board::EMPTY_SPOT
-
-    true
+  def pawn_promotion_possible?(pawn)
+    # condition is simple if it has reached other side of board promote it
+    return true if pawn.color == "black" && pawn.row == 7
+    return true if pawn.color == "white" && pawn.row == 0
   end
 end
