@@ -41,12 +41,10 @@ module MoveCalculator
       moves << [row + 1, col - 1] if (row + 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row + 1, col - 1) && !square_under_attack?(row + 1, col - 1, piece.enemy_color, board)
       moves << [row - 1, col + 1] if (row - 1).between?(0, 7) && (col + 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col + 1) && !square_under_attack?(row - 1, col + 1, piece.enemy_color, board)
       moves << [row - 1, col - 1] if (row - 1).between?(0, 7) && (col - 1).between?(0, 7) && !board.friendly_at?(piece.color, row - 1, col - 1) && !square_under_attack?(row - 1, col - 1, piece.enemy_color, board)
-      # castling queen_side
-      # for king and rook
-      # [row, col + 3]
-      # c1d1
-      moves << [row, col - 2, "c1d1"] if queen_side_castle_possible?(piece, board)
-      moves << [row, col + 2, "g1f1"] if king_side_castle_possible?(piece, board)
+      # castling
+      moves << [row, col - 2, row, col - 1] if queen_side_castle_possible?(piece, board)
+      moves << [row, col + 2, row, col + 1] if king_side_castle_possible?(piece, board)
+      p moves
 
       moves
     end

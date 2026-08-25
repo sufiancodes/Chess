@@ -40,12 +40,9 @@ class UI
   end
 
   def translate_castling_input(position)
-    # first cut these c1d1 string in half
     destination = []
     moves = position.chars.each_slice(position.length / 2).map(&:join)
     moves.each { |move| destination << translate_user_input(move) }
     destination
   end
 end
-ui = UI.new
-p ui.translate_user_input("a1")

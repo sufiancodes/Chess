@@ -150,16 +150,12 @@ class Board
         Bishop.new("white", 7, 2, false),
         Queen.new("white", 7, 3, false),
         King.new("white", 7, 4, false),
-        # Bishop.new("white", 7, 5, false)
-        EMPTY_SPOT,
-        # Knight.new("white", 7, 6)
-        EMPTY_SPOT,
+        Bishop.new("white", 7, 5, false),
+        Knight.new("white", 7, 6),
         Rook.new("white", 7, 7, false),
       ]
   end
 end
-board = Board.new
-p board.find_rook([0, 4], [0, 6])
 # board.display_board(board.board)
 # white_king = board.piece_at(7, 4)
 # p board.rule_engine.queen_side_castle_possible?(white_king, board)
