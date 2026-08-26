@@ -84,6 +84,13 @@ class Board
     @board[from[0]][from[1]] = EMPTY_SPOT
   end
 
+  def promote_pawn(pawn)
+    color = pawn.color
+    row = pawn.row
+    col = pawn.row
+    board[row][col] = Queen.new(color, row, col, false)
+  end
+
   def find_rook(king_from, king_to)
     rook = []
     king = piece_at(king_from[0], king_from[1])
@@ -141,7 +148,8 @@ class Board
         Pawn.new("white", 6, 4, false),
         Pawn.new("white", 6, 5, false),
         Pawn.new("white", 6, 6, false),
-        Pawn.new("white", 6, 7, false),
+        # Pawn.new("white", 6, 7, false)
+        EMPTY_SPOT,
       ]
     @board[7] =
       [
@@ -152,17 +160,11 @@ class Board
         King.new("white", 7, 4, false),
         Bishop.new("white", 7, 5, false),
         Knight.new("white", 7, 6),
-        Rook.new("white", 7, 7, false),
+        # Rook.new("white", 7, 7, false)
+        EMPTY_SPOT,
       ]
   end
 end
-# board.display_board(board.board)
-# white_king = board.piece_at(7, 4)
-# p board.rule_engine.queen_side_castle_possible?(white_king, board)
-# board.display_board(board.board)
-# board.board[7][4]
-# board.board[7][0]
-# board.move_two_pieces([7, 4], [7, 2], [7, 0], [7, 3])
-# board.display_board(board.board)
-# now after I fixed this (checkmate) I need to implement ent passant, castling, pawn promotion, serialization and then write tests and the project done.
-# [[7, 3], [[7, 2], [7, 7]]]
+board = Board.new
+p pawn = board.piece_at(6, 0)
+board.promote_pawn(pawn)
