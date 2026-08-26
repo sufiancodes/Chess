@@ -32,6 +32,7 @@ class Game
 
       # listing moves
       possible_moves = list_moves(source)
+      p possible_moves
       if possible_moves.nil?
         puts "No possible moves here"
         redo
@@ -40,9 +41,11 @@ class Game
         puts " "
       end
 
+      # now here i need to make sure player has select move from the given moves
       # Taking user selected move and moving piece on board
       selected_move = gets.chomp
       destination = @ui.translate_user_input(selected_move)
+      redo unless possible_moves.include?(destination)
 
       if selected_move.length == 4
         castling_positions = @ui.translate_castling_input(selected_move)
