@@ -26,6 +26,7 @@ class Game
       input = gets.chomp
       source = @ui.translate_user_input(input)
       selected_piece = @board.piece_at(source[0], source[1])
+      p(selected_piece)
 
       # listing moves
       possible_moves = list_moves(source)
@@ -47,6 +48,9 @@ class Game
       else
         @board.move_piece(source, destination)
       end
+
+      # pawn promotion
+      @board.promote_pawn(selected_piece) if @rule_engine.pawn_promotion_possible?(selected_piece)
 
       # finding enemy king
       piece = @board.piece_at(destination[0], destination[1])
