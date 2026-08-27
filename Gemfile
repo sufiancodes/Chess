@@ -7,3 +7,5 @@ source "https://rubygems.org"
 gem "rubocop-shopify", "~> 2.18"
 
 gem "debug", "~> 1.11"
+
+gem "json", "~> 2.19"
