@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require "json"
 require_relative "move_calculator"
 require_relative "pieces/pawn"
 require_relative "pieces/knight"
@@ -20,9 +20,6 @@ class Board
   def initialize
     @board = Array.new(8) { Array.new(8) { EMPTY_SPOT } }
     populate_board
-    # @ui to be remove
-    @ui = UI.new
-    @rule_engine = RuleEngine.new
   end
 
   def piece_at(row, col)
@@ -36,16 +33,6 @@ class Board
   def column(col)
     rotated_board = @board.transpose
     rotated_board[col]
-  end
-
-  def display_board(board)
-    # to be remove
-    ui.display(board)
-  end
-
-  def translate_it(array)
-    # to be remove
-    ui.translate_computer_input(array)
   end
 
   def empty_at?(row, col)
@@ -148,8 +135,7 @@ class Board
         Pawn.new("white", 6, 4, false),
         Pawn.new("white", 6, 5, false),
         Pawn.new("white", 6, 6, false),
-        # Pawn.new("white", 6, 7, false)
-        EMPTY_SPOT,
+        Pawn.new("white", 6, 7, false),
       ]
     @board[7] =
       [
@@ -160,11 +146,7 @@ class Board
         King.new("white", 7, 4, false),
         Bishop.new("white", 7, 5, false),
         Knight.new("white", 7, 6),
-        # Rook.new("white", 7, 7, false)
-        EMPTY_SPOT,
+        Rook.new("white", 7, 7, false),
       ]
   end
 end
-board = Board.new
-p pawn = board.piece_at(6, 0)
-board.promote_pawn(pawn)
