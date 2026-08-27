@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require "json"
+
 require_relative "move_calculator"
 require_relative "pieces/pawn"
 require_relative "pieces/knight"
