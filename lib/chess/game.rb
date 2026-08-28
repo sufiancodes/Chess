@@ -87,6 +87,12 @@ class Game
 
     data = JSON.dump(game_state)
   end
+
+  def save_serialize_data
+    puts "Write the name of file"
+    name = gets.chomp
+    File.write("#{name}.json", to_json)
+  end
 end
 
 game = Game.new
