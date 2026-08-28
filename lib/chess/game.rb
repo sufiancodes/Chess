@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "json"
 require_relative "board"
 require_relative "player"
 require_relative "ui"
@@ -13,7 +14,6 @@ class Game
     @board = Board.new
     @player = Player.new
     @ui = UI.new
-    @current_name = nil
     @rule_engine = RuleEngine.new
   end
 
@@ -32,7 +32,6 @@ class Game
 
       # listing moves
       possible_moves = list_moves(source)
-      p possible_moves
       if possible_moves.nil?
         puts "No possible moves here"
         redo
@@ -41,12 +40,10 @@ class Game
         puts " "
       end
 
-      # now here i need to make sure player has select move from the given moves
       # Taking user selected move and moving piece on board
       selected_move = gets.chomp
       destination = @ui.translate_user_input(selected_move)
       redo unless possible_moves.include?(destination)
-
       if selected_move.length == 4
         castling_positions = @ui.translate_castling_input(selected_move)
         @board.move_two_pieces([selected_piece.row, selected_piece.col], castling_positions[0], castling_positions[1])
@@ -80,6 +77,15 @@ class Game
       puts "Now select the move from below you wish to play"
       moves.each { |element| print(@ui.translate_computer_input(element) + " ") }
     end
+  end
+
+  def to_json
+    game_state = {
+      board: @board.board,
+      player: @player,
+    }
+
+    data = JSON.dump(game_state)
   end
 end
 
