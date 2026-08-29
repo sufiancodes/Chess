@@ -24,7 +24,12 @@ class Game
       # prompting user to select the piece and processing user input
       puts "#{player.current_player}: Please chose the piece you wish to move"
       input = gets.chomp
-      # here the guardrail need to be install like it should actually be piece not just empty string thing and it need to take care of instance when save or quite is type
+
+
+      # load, save and quit functionality
+      save_serialize_data if input == "save"
+      redo if input == "save"
+      break if input == "quit"
 
       source = @ui.translate_user_input(input)
       redo if @board.empty_at?(source[0], source[1])
@@ -85,7 +90,7 @@ class Game
       player: @player,
     }
 
-    data = JSON.dump(game_state)
+    JSON.dump(game_state)
   end
 
   def save_serialize_data
