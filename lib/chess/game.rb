@@ -25,7 +25,6 @@ class Game
       puts "#{player.current_player}: Please chose the piece you wish to move"
       input = gets.chomp
 
-
       # load, save and quit functionality
       save_serialize_data if input == "save"
       redo if input == "save"
@@ -96,7 +95,14 @@ class Game
   def save_serialize_data
     puts "Write the name of file"
     name = gets.chomp
-    File.write("#{name}.json", to_json)
+    File.write("loads/#{name}.json", to_json)
+  end
+
+  def from_json
+    puts "Type in name of the file"
+    name_of_file = gets.chomp
+    data = File.read("loads/#{name_of_file}.json")
+    JSON.parse(data)
   end
 end
 
