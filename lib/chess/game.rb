@@ -98,11 +98,17 @@ class Game
     File.write("loads/#{name}.json", to_json)
   end
 
-  def from_json
+  def from_json(name)
+    data = File.read("loads/#{name}.json")
+    JSON.parse(data)
+  end
+
+  def load_saved_data
     puts "Type in name of the file"
     name_of_file = gets.chomp
-    data = File.read("loads/#{name_of_file}.json")
-    JSON.parse(data)
+    hash = from_json(name_of_file)
+    @board.board = hash[board]
+    @player = hash[player]
   end
 end
 
