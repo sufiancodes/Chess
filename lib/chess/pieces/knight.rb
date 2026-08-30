@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 require_relative "piece"
 # this class will have all data related to knight
-class Knight
+class Knight < Piece
   BLACK_KNIGHT = "\u2658"
   WHITE_KNIGHT = "\u265E"
 
