@@ -8,10 +8,11 @@ class Knight
 
   BLACK_KNIGHT = "\u2658"
   WHITE_KNIGHT = "\u265E"
-  def initialize(color, row, col)
+  def initialize(color, row, col, has_moved)
     @row = row
     @col = col
     @color = color
+    @has_moved = has_moved
   end
 
   def to_s

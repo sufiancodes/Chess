@@ -11,8 +11,7 @@ require_relative "ui"
 require_relative "rule_engine"
 # All logic related to board
 class Board
-  attr_reader :board
-  attr_accessor :ui, :rule_engine
+  attr_accessor :board
 
   include MoveCalculator
 
@@ -107,12 +106,12 @@ class Board
     @board[0] =
       [
         Rook.new("black", 0, 0, false),
-        Knight.new("black", 0, 1),
+        Knight.new("black", 0, 1, false),
         Bishop.new("black", 0, 2, false),
         Queen.new("black", 0, 3, false),
         King.new("black", 0, 4, false),
         Bishop.new("black", 0, 5, false),
-        Knight.new("black", 0, 6),
+        Knight.new("black", 0, 6, false),
         Rook.new("black", 0, 7, false),
       ]
     @board[1] =
@@ -140,12 +139,12 @@ class Board
     @board[7] =
       [
         Rook.new("white", 7, 0, false),
-        Knight.new("white", 7, 1),
+        Knight.new("white", 7, 1, false),
         Bishop.new("white", 7, 2, false),
         Queen.new("white", 7, 3, false),
         King.new("white", 7, 4, false),
         Bishop.new("white", 7, 5, false),
-        Knight.new("white", 7, 6),
+        Knight.new("white", 7, 6, false),
         Rook.new("white", 7, 7, false),
       ]
   end
