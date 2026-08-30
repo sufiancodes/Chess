@@ -1,23 +1,11 @@
 # frozen_string_literal: true
 
-class Bishop
-  attr_reader :color
-  attr_accessor :has_moved, :row, :col
-
+require_relative "piece"
+class Bishop < Piece
   BLACK_BISHOP = "\u2657"
   WHITE_BISHOP = "\u2657"
-  def initialize(color, row, col, has_moved)
-    @color = color
-    @row = row
-    @col = col
-    @has_moved = false
-  end
 
   def to_s
     @color == "black" ? BLACK_BISHOP : WHITE_BISHOP
-  end
-
-  def enemy_color
-    @color == "white" ? "black" : "white"
   end
 end
