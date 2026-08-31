@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require_relative "pieces/piece"
 require_relative "board"
 require_relative "player"
 require_relative "ui"
@@ -28,6 +29,8 @@ class Game
       # load, save and quit functionality
       save_serialize_data if input == "save"
       redo if input == "save"
+      load_saved_data if input == "load"
+      redo if input == "load"
       break if input == "quit"
 
       source = @ui.translate_user_input(input)
@@ -84,12 +87,12 @@ class Game
   end
 
   def to_json
-    game_state = {
-      board: @board.board,
-      player: @player,
-    }
-
-    JSON.dump(game_state)
+    game_state = @board.board.map do |row|
+      row.map do |square|
+        square.is_a?(Piece) ? square.to_h : square.to_s
+      end
+    end
+    game_state
   end
 
   def save_serialize_data
@@ -107,8 +110,7 @@ class Game
     puts "Type in name of the file"
     name_of_file = gets.chomp
     hash = from_json(name_of_file)
-    @board.board = hash[board]
-    @player = hash[player]
+    @board.board = hash["board"]
   end
 end
 
