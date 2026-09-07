@@ -86,7 +86,7 @@ class Game
     end
   end
 
-  def to_json
+  def save_data
     game_state = @board.board.map do |row|
       row.map do |square|
         square.is_a?(Piece) ? square.to_h : square.to_s
@@ -98,7 +98,7 @@ class Game
   def save_serialize_data
     puts "Write the name of file"
     name = gets.chomp
-    File.write("loads/#{name}.json", to_json)
+    File.write("loads/#{name}.json", JSON.dump(save_data))
   end
 
   def from_json(name)
