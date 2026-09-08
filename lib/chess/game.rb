@@ -68,7 +68,7 @@ class Game
       # showing board and switching player
       @ui.display(@board.board)
 
-      # stop game if its checkmate
+      # stop game if its checkmate or 
       break if @rule_engine.check_mate?(enemy_king, @board)
 
       player.switch_player!
@@ -102,15 +102,23 @@ class Game
   end
 
   def from_json(name)
-    data = File.read("loads/#{name}.json")
-    JSON.parse(data)
+    JSON.parse(File.read("loads/#{name}.json"))
   end
 
   def load_saved_data
     puts "Type in name of the file"
     name_of_file = gets.chomp
-    hash = from_json(name_of_file)
-    @board.board = hash["board"]
+    data = from_json(name_of_file)
+    @board.board = data.map do |row|
+      row.map do |square|
+        if square.is_a?(Hash)
+          klass = Object.const_get(square["type"])
+          klass.new(square["color"], square["row"], square["col"], square["has_moved"])
+        else
+          "☐"
+        end
+      end
+    end
   end
 end
 
