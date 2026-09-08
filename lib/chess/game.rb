@@ -75,6 +75,8 @@ class Game
     end
   end
 
+  private
+
   def list_moves(source)
     moves = MoveCalculator.possible_moves_from(source, @board)
     if moves.empty?
