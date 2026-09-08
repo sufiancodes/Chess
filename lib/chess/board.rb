@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_relative "move_calculator"
+
 require_relative "pieces/pawn"
 require_relative "pieces/knight"
 require_relative "pieces/rook"
 require_relative "pieces/bishop"
 require_relative "pieces/queen"
 require_relative "pieces/king"
-require_relative "ui"
-require_relative "rule_engine"
+require_relative "pieces/piece"
+
 # All logic related to board
 class Board
   attr_accessor :board
@@ -73,7 +73,7 @@ class Board
   def promote_pawn(pawn)
     color = pawn.color
     row = pawn.row
-    col = pawn.row
+    col = pawn.col
     board[row][col] = Queen.new(color, row, col, false)
   end
 
