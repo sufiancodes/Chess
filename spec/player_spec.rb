@@ -18,4 +18,14 @@ describe Player do
     player.turn = 1
     expect(player.current_player).to(eq("Bob"))
   end
+
+  it "returns one when turn is zero" do
+    player.turn = 0
+    expect(player.switch_player!).to(eq(1))
+  end
+
+  it "returns zero when turn is one" do
+    player.turn = 1
+    expect(player.switch_player!).to(eq(0))
+  end
 end
