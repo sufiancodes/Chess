@@ -1,24 +1,94 @@
-# Chess
-This a command line Chess game where two players can play against each other.
+# ♟️ Chess CLI
 
-## **Here is how it looks**
+A classic two-player chess game built in Ruby and played directly in your terminal.
 
-<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/5e1442c0-3804-434b-aee3-ff132e1a6b66" />
+> **Status:** 🚧 Active development
 
-### Features
-1. It can declare checkmate when it occur.
-2. you can perform castling.
-3. You can load game just type in load when it prompt user to pick piece to move.
-4. You can save game just type in save when it prompt user to pick piece to move.
-5. you can quit game just type in quit when it prompt user to pick piece to move.
+## ✨ Overview
 
-## How to Use
-firstly do
+Chess CLI brings the fundamentals of chess to the command line with a simple, interactive interface. Challenge a friend, make your moves, save your progress, and continue the game whenever you are ready.
+
+## 📸 Preview
+
+<img width="600" height="400" alt="Chess CLI game preview" src="https://github.com/user-attachments/assets/5e1442c0-3804-434b-aee3-ff132e1a6b66" />
+
+## 🎯 Features
+
+- ✅ Two-player local chess gameplay
+- ✅ Checkmate detection
+- ✅ Castling
+- ✅ Save an in-progress game
+- ✅ Load a previously saved game
+- ✅ Quit safely at any time
+- ✅ Interactive command-line board
+
+## 🛠️ Built With
+
+- [Ruby](https://www.ruby-lang.org/)
+- [RSpec](https://rspec.info/) for testing
+- [RuboCop](https://rubocop.org/) for code quality
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure Ruby and Bundler are installed on your machine.
+
+### Installation
+
+Clone the repository and install the project dependencies:
+
+```bash
+git clone https://github.com/sufiancodes/Chess.git
+cd Chess
+bundle install
 ```
-Bundle install
-```
-Then
-```
+
+### Run the game
+
+```bash
 ruby main.rb
 ```
-<sub>**This project currently don't have en_passant and stalemate**</sub>
+
+## 🎮 Commands
+
+During the game, enter one of the following commands when prompted to choose a piece:
+
+| Command | Action |
+| --- | --- |
+| `save` | Save the current game |
+| `load` | Load a saved game |
+| `quit` | Exit the game |
+
+For regular moves, follow the prompts shown in the terminal.
+
+## 🧪 Running Tests
+
+Run the test suite with:
+
+```bash
+bundle exec rspec
+```
+
+To check the code style with RuboCop:
+
+```bash
+bundle exec rubocop
+```
+
+## 🗺️ Roadmap
+
+The following chess rules are still planned or under development:
+
+- [ ] En passant
+- [ ] Stalemate detection
+- [ ] Improved input validation
+- [ ] Additional gameplay polish
+
+## 🤝 Contributing
+
+Contributions, suggestions, and bug reports are welcome. Feel free to open an issue or submit a pull request.
+
+## 📄 License
+
+This project is open source. See the repository for license details.
