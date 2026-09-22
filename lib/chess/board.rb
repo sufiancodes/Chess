@@ -13,8 +13,6 @@ require_relative "pieces/piece"
 class Board
   attr_accessor :board
 
-  include MoveCalculator
-
   EMPTY_SPOT = "\u2610"
   def initialize
     @board = Array.new(8) { Array.new(8) { EMPTY_SPOT } }

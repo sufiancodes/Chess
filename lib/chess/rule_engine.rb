@@ -35,6 +35,7 @@ class RuleEngine
   def pawn_promotion_possible?(pawn)
     # condition is simple if it has reached other side of board promote it
     return true if pawn.color == "black" && pawn.row == 7
-    return true if pawn.color == "white" && pawn.row == 0
+
+    true if pawn.color == "white" && pawn.row == 0
   end
 end
