@@ -2,7 +2,7 @@
 
 A classic two-player chess game built in Ruby and played directly in your terminal.
 
-> **Status:** 🚧 Active development
+
 
 ## ✨ Overview
 
@@ -88,7 +88,3 @@ The following chess rules are still planned or under development:
 ## 🤝 Contributing
 
 Contributions, suggestions, and bug reports are welcome. Feel free to open an issue or submit a pull request.
-
-## 📄 License
-
-This project is open source. See the repository for license details.
