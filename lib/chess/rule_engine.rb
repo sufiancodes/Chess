@@ -7,7 +7,9 @@ class RuleEngine
   include MoveCalculator
 
   def check_mate?(king, board)
-    MoveCalculator.check?(king, board) && MoveCalculator.possible_moves_from([king.row, king.col], board).empty? && !can_escape?(king, board)
+    return false unless MoveCalculator.check?(king, board)
+
+    MoveCalculator.possible_moves_from([king.row, king.col], board).empty? && !can_escape?(king, board)
   end
 
   def valid_moves(king, board)
@@ -19,17 +21,14 @@ class RuleEngine
   end
 
   def can_escape?(king, board)
-    dummy_board = Marshal.load(Marshal.dump(board))
-    dummy_king = dummy_board.find_king(king.color)
-    collected_move = valid_moves(dummy_king, dummy_board)
-    collected_move.each do |row, col|
-      original_state = dummy_board.board[row][col]
-      dummy_board.board[row][col] = Knight.new(dummy_king.color, row, col)
-      return true if MoveCalculator.check?(dummy_king, dummy_board) == false
+    board.collect_all_pieces(king.color)
+      .reject { |piece| piece.is_a?(King) }
+      .any? { |piece| legal_moves_for_piece(piece, board).any? }
+  end
 
-      dummy_board.board[row][col] = original_state
-    end
-    false
+  def legal_moves_for_piece(piece, board)
+    pseudo_legal_moves = MoveCalculator.possible_moves_from([piece.row, piece.col], board)
+    pseudo_legal_moves.select { |move| legal_after_move?(piece, move, board) }
   end
 
   def pawn_promotion_possible?(pawn)
@@ -37,5 +36,25 @@ class RuleEngine
     return true if pawn.color == "black" && pawn.row == 7
 
     true if pawn.color == "white" && pawn.row == 0
+  end
+
+  private
+
+  def legal_after_move?(piece, move, board)
+    dummy_board = Marshal.load(Marshal.dump(board))
+    dummy_piece = dummy_board.piece_at(piece.row, piece.col)
+
+    if castling_move?(move)
+      dummy_board.move_two_pieces([dummy_piece.row, dummy_piece.col], move[0, 2], move[2, 2])
+    else
+      dummy_board.move_piece([dummy_piece.row, dummy_piece.col], move)
+    end
+
+    own_king = dummy_board.find_king(piece.color)
+    !MoveCalculator.check?(own_king, dummy_board)
+  end
+
+  def castling_move?(move)
+    move.length == 4
   end
 end
