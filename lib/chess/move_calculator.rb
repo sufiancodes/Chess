@@ -44,7 +44,6 @@ module MoveCalculator
       # castling
       moves << [row, col - 2, row, col - 1] if queen_side_castle_possible?(piece, board)
       moves << [row, col + 2, row, col + 1] if king_side_castle_possible?(piece, board)
-      p moves
 
       moves
     end

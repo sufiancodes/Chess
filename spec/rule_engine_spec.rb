@@ -14,7 +14,6 @@ RSpec.describe(RuleEngine) do
       allow(MoveCalculator).to(receive(:possible_moves_from))
       allow(rule_engine).to(receive(:can_escape?))
     end
-
     it "returns true when the king is in check and cannot escape" do
       allow(MoveCalculator).to(receive(:check?).with(king, board).and_return(true))
       allow(king).to(receive(:row).and_return(0))
